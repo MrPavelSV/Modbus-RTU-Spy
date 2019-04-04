@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.539
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "modbus_rtu_spy", "modbus_rtu_spy\modbus_rtu_spy.csproj", "{5A20D0A3-B704-47FD-B273-2411C055455F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5A20D0A3-B704-47FD-B273-2411C055455F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A20D0A3-B704-47FD-B273-2411C055455F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A20D0A3-B704-47FD-B273-2411C055455F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A20D0A3-B704-47FD-B273-2411C055455F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {85D12234-75F6-4EAE-8FC5-C532FBA6ED73}
+	EndGlobalSection
+EndGlobal
