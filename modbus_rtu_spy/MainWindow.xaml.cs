@@ -117,8 +117,11 @@ namespace modbus_rtu_spy
                 }               
             }
 
+            LogCom += Environment.NewLine;
+            LogCom += "----------------------------------------------------------------------------------------";
+            LogCom += Environment.NewLine;
             Dispatcher.Invoke(new Action(() =>
-                {
+                {         
                     rtextbox.AppendText(LogCom);
                     rtextbox.ScrollToEnd();
                     LogCom = "";
@@ -342,6 +345,7 @@ namespace modbus_rtu_spy
         public void Dispose()
         {
             Dispose(false);
+            GC.SuppressFinalize(this);
         }
 
         protected virtual void Dispose(bool disposing)
