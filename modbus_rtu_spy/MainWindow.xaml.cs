@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.IO.Ports;
-using System.Timers;
+using System.Threading;
 using System.Collections.Generic;
 
 namespace modbus_rtu_spy
@@ -10,6 +10,7 @@ namespace modbus_rtu_spy
     {
         public SerialPort com_spy;
         public string LogCom;
+        public string RawCom;
         public byte[] dataLog;
         public int numberframe;
         public Timer timer;
@@ -35,14 +36,16 @@ namespace modbus_rtu_spy
                     cbx_Port.Items.Add("COM" + portname);
                 }
             }
-            dataLog = new byte[8192];
         }
 
-        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        private void OnTimedEvent(object state)
         {
             int k = 0;
             int l = 0;
-            //int lastframe_idx = 0;
+            numberframe = 0;
+            LogCom = "";
+            RawCom = "";
+
             List<byte[]> farmelist = new List<byte[]>();
             byte[] CalcCRC = new byte[2];
 
@@ -50,7 +53,7 @@ namespace modbus_rtu_spy
             byte[] dataLog = new byte[datareceive];
             com_spy.Read(dataLog, 0, datareceive);
 
-            for (l = 0/*lastframe_idx*/; l < (datareceive - 5); l++)
+            for (l = 0; l < (datareceive - 5); l++)
             {
                 for (k = l; k < (datareceive - 5); k++)
                 {
@@ -78,7 +81,6 @@ namespace modbus_rtu_spy
                         
                         if (CalcCRC[0]  == dataLog[k + 3] && CalcCRC[1] == dataLog[k + 4])
                         {
-                            //lastframe_idx = k + 5;
                             byte[] temp_frame = new byte[((k + 5) - l)];
                             Array.Copy(dataLog, l, temp_frame, 0, ((k + 5) - l));
                             farmelist.Add(temp_frame);
@@ -87,6 +89,10 @@ namespace modbus_rtu_spy
                         }
                     }
                 }
+            }
+            foreach (var hexstr in dataLog)
+            {
+                RawCom += string.Format("{0:X2}", hexstr) + " ";
             }
 
             int countbyteidx = 0;
@@ -129,17 +135,18 @@ namespace modbus_rtu_spy
                 }               
             }
 
+            LogCom += "----------------------------";
             LogCom += Environment.NewLine;
-            LogCom += "----------------------------------------------------";
-            LogCom += Environment.NewLine;
+
             Dispatcher.Invoke(new Action(() =>
                 {
                     differencelabel.Content = datareceive - countbyteidx;
                     countidxlabel.Content = countbyteidx;
                     lastframeidxlabel.Content = datareceive;
+                    rtextboxRaw.AppendText(RawCom);
                     rtextbox.AppendText(LogCom);
                     rtextbox.ScrollToEnd();
-                    LogCom = "";
+                    rtextboxRaw.ScrollToEnd();
                 }
             ));
         }
@@ -213,20 +220,16 @@ namespace modbus_rtu_spy
                 Close_port.IsEnabled = true;
                 com_spy.Open();
                 
-                timer = new Timer();
+                timer = new Timer(OnTimedEvent);
                 try
                 {
-                    timer.Interval = ushort.Parse(Capptextb.Text);
+                    timer.Change(0, ushort.Parse(Capptextb.Text));
                 }
                 catch
                 {
-                    timer.Interval = 3000;
                     Capptextb.Text = "3000";
+                    timer.Change(0, ushort.Parse(Capptextb.Text));
                 }
-
-                timer.Elapsed += OnTimedEvent;
-                timer.AutoReset = true;
-                timer.Start(); 
             }
         }
 
@@ -236,7 +239,6 @@ namespace modbus_rtu_spy
             {
                 if (com_spy.IsOpen)
                 {
-                    timer.Stop();
                     timer.Dispose();
                     com_spy.Close();
                     com_spy.Dispose();
@@ -256,6 +258,7 @@ namespace modbus_rtu_spy
         private void Clear(object sender, RoutedEventArgs e)
         {
             rtextbox.Document.Blocks.Clear();
+            rtextboxRaw.Document.Blocks.Clear();
             numberframe = 0;
         }
 
@@ -360,6 +363,5 @@ namespace modbus_rtu_spy
             }
             disposing = true;
         }
-
     }
 }

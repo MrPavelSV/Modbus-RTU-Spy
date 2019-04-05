@@ -33,7 +33,7 @@
                     <ComboBoxItem Content="6" HorizontalAlignment="Left" Width="118"/>
                     <ComboBoxItem Content="7" HorizontalAlignment="Left" Width="118"/>
                     <ComboBoxItem Content="8" HorizontalAlignment="Left" Width="118"/>
-                </ComboBox>                
+                </ComboBox>
                 <Label Content="Parity" HorizontalAlignment="Left" Margin="0,100,0,0" VerticalAlignment="Top"/>
                 <ComboBox Name="cbx_Parity" HorizontalAlignment="Left" Margin="132,100,0,0" VerticalAlignment="Top" Width="120" IsReadOnly="True" FontFamily="Consolas" SelectedIndex="2">
                     <ComboBoxItem Content="Even" HorizontalAlignment="Left" Width="118"/>
@@ -58,12 +58,27 @@
                 <Label Name ="differencelabel" Content="" HorizontalAlignment="Left" Margin="190,266,0,0" VerticalAlignment="Top" Width="60"/>
             </Grid>
         </GroupBox>
-        <RichTextBox Name="rtextbox" HorizontalAlignment="Left" Margin="269,10,0,0" VerticalAlignment="Top" FontFamily="Consolas" VerticalScrollBarVisibility="Auto">
-            <FlowDocument>
-                <Paragraph>
-                    <Run Text=""/>
-                </Paragraph>
-            </FlowDocument>
-        </RichTextBox>
+        <Grid VerticalAlignment="Top" Margin="269,10,0,0" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="2" Grid.RowSpan="1" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <RichTextBox Grid.Column="0"  Name="rtextbox" FontFamily="Consolas" Width="Auto" VerticalScrollBarVisibility="Auto">
+                <FlowDocument>
+                    <Paragraph>
+                        <Run Text=""/>
+                    </Paragraph>
+                </FlowDocument>
+            </RichTextBox>
+            <GridSplitter Grid.Column="1" ShowsPreview="False" Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+            <RichTextBox Grid.Column="2" Name="rtextboxRaw" FontFamily="Consolas" Width="Auto"  VerticalScrollBarVisibility="Auto">
+                <FlowDocument>
+                    <Paragraph>
+                        <Run Text=""/>
+                    </Paragraph>
+                </FlowDocument>
+            </RichTextBox>
+        </Grid>
     </Grid>
 </Window>
