@@ -53,7 +53,9 @@
                 <Button Name="Clear_text" Content="Clear" HorizontalAlignment="Left" Margin="100,230,0,0" VerticalAlignment="Top" Width="74" Click="Clear"/>
                 <Label Content="Capture period (ms)" HorizontalAlignment="Left" Margin="0,160,0,0" VerticalAlignment="Top"/>
                 <TextBox Name ="Capptextb" HorizontalAlignment="Left" Height="23" Margin="132,160,0,0" VerticalAlignment="Top" Width="118" FontFamily="Consolas" VerticalContentAlignment="Center" Text="3000" TextChanged="Capptextb_TextChanged"/>
-                <Label Name ="lastframeidxlabel" Content="" HorizontalAlignment="Left" Margin="10,266,0,0" VerticalAlignment="Top" Width="131"/>
+                <Label Name ="lastframeidxlabel" Content="" HorizontalAlignment="Left" Margin="10,266,0,0" VerticalAlignment="Top" Width="60"/>
+                <Label Name ="countidxlabel" Content="" HorizontalAlignment="Left" Margin="100,266,0,0" VerticalAlignment="Top" Width="60"/>
+                <Label Name ="differencelabel" Content="" HorizontalAlignment="Left" Margin="190,266,0,0" VerticalAlignment="Top" Width="60"/>
             </Grid>
         </GroupBox>
         <RichTextBox Name="rtextbox" HorizontalAlignment="Left" Margin="269,10,0,0" VerticalAlignment="Top" FontFamily="Consolas" VerticalScrollBarVisibility="Auto">

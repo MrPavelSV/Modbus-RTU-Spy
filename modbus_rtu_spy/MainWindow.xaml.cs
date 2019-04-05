@@ -11,7 +11,6 @@ namespace modbus_rtu_spy
         public SerialPort com_spy;
         public string LogCom;
         public byte[] dataLog;
-        public int lastIndex;
         public int numberframe;
         public Timer timer;
         List<int> ports = new List<int>();
@@ -36,20 +35,24 @@ namespace modbus_rtu_spy
                     cbx_Port.Items.Add("COM" + portname);
                 }
             }
-            dataLog = new byte[0xFFFF];
+            dataLog = new byte[8192];
         }
 
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
             int k = 0;
             int l = 0;
-            int lastframe_idx = 0;
+            //int lastframe_idx = 0;
             List<byte[]> farmelist = new List<byte[]>();
             byte[] CalcCRC = new byte[2];
 
-            for (l = lastframe_idx; l < (lastIndex - 5); l++)
+            int datareceive = com_spy.BytesToRead;
+            byte[] dataLog = new byte[datareceive];
+            com_spy.Read(dataLog, 0, datareceive);
+
+            for (l = 0/*lastframe_idx*/; l < (datareceive - 5); l++)
             {
-                for (k = l; k < (lastIndex - 5); k++)
+                for (k = l; k < (datareceive - 5); k++)
                 {
                     if (((dataLog[l] > 0) && (dataLog[l] < 249)) && 
                         (dataLog[(l + 1)] == 0x01 || 
@@ -75,7 +78,7 @@ namespace modbus_rtu_spy
                         
                         if (CalcCRC[0]  == dataLog[k + 3] && CalcCRC[1] == dataLog[k + 4])
                         {
-                            lastframe_idx = k + 5;
+                            //lastframe_idx = k + 5;
                             byte[] temp_frame = new byte[((k + 5) - l)];
                             Array.Copy(dataLog, l, temp_frame, 0, ((k + 5) - l));
                             farmelist.Add(temp_frame);
@@ -83,6 +86,15 @@ namespace modbus_rtu_spy
                             break;
                         }
                     }
+                }
+            }
+
+            int countbyteidx = 0;
+            foreach (var countframe in farmelist)
+            {
+                foreach (var countbyte in countframe)
+                {
+                    countbyteidx++;
                 }
             }
 
@@ -118,14 +130,16 @@ namespace modbus_rtu_spy
             }
 
             LogCom += Environment.NewLine;
-            LogCom += "----------------------------------------------------------------------------------------";
+            LogCom += "----------------------------------------------------";
             LogCom += Environment.NewLine;
             Dispatcher.Invoke(new Action(() =>
-                {         
+                {
+                    differencelabel.Content = datareceive - countbyteidx;
+                    countidxlabel.Content = countbyteidx;
+                    lastframeidxlabel.Content = datareceive;
                     rtextbox.AppendText(LogCom);
                     rtextbox.ScrollToEnd();
                     LogCom = "";
-                    lastIndex = 0;                  
                 }
             ));
         }
@@ -188,7 +202,7 @@ namespace modbus_rtu_spy
                 com_spy.Parity = tParity;
                 com_spy.DataBits = idatabits;
                 com_spy.StopBits = stopBits;
-                lastIndex = 0;
+                com_spy.ReadBufferSize = 8192;
                 Open_port.IsEnabled = false;
                 cbx_Data.IsEnabled = false;
                 cbx_Parity.IsEnabled = false;
@@ -197,8 +211,8 @@ namespace modbus_rtu_spy
                 cbx_StopBits.IsEnabled = false;
                 Capptextb.IsEnabled = false;
                 Close_port.IsEnabled = true;
-                com_spy.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
                 com_spy.Open();
+                
                 timer = new Timer();
                 try
                 {
@@ -209,6 +223,7 @@ namespace modbus_rtu_spy
                     timer.Interval = 3000;
                     Capptextb.Text = "3000";
                 }
+
                 timer.Elapsed += OnTimedEvent;
                 timer.AutoReset = true;
                 timer.Start(); 
@@ -224,7 +239,6 @@ namespace modbus_rtu_spy
                     timer.Stop();
                     timer.Dispose();
                     com_spy.Close();
-                    com_spy.DataReceived -= new SerialDataReceivedEventHandler(DataReceivedHandler);
                     com_spy.Dispose();
                     Open_port.IsEnabled = true;
                     Open_port.IsEnabled = true;
@@ -237,20 +251,6 @@ namespace modbus_rtu_spy
                     Close_port.IsEnabled = false;
                 }
             }
-        }
-
-        private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
-        {
-            int datareceive = com_spy.BytesToRead;
-            byte[] datatemp = new byte[datareceive];
-            com_spy.Read(datatemp,0, datareceive);
-            Dispatcher.Invoke(new Action(() =>
-                {
-                    Array.Copy(datatemp, 0, dataLog, lastIndex, datareceive);
-                    lastIndex += datareceive;
-                    lastframeidxlabel.Content = lastIndex;
-                }
-            ));
         }
 
         private void Clear(object sender, RoutedEventArgs e)
