@@ -15,6 +15,7 @@ namespace modbus_rtu_spy
         public int numberframe;
         public Timer timer;
         List<int> ports = new List<int>();
+
         public MainWindow()
         {
             InitializeComponent();
