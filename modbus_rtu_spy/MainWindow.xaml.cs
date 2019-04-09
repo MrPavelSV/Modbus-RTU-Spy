@@ -53,18 +53,18 @@ namespace modbus_rtu_spy
             byte[] dataLog = new byte[datareceive];
             com_spy.Read(dataLog, 0, datareceive);
 
-            for (l = 0; l < (datareceive - 5); l++)
+            for (l = 0; l < (datareceive - 4); l++)
             {
-                for (k = l; k < (datareceive - 5); k++)
+                for (k = l; k < (datareceive - 4); k++)
                 {
-                    if (((dataLog[l] > 0) && (dataLog[l] < 249)) && 
-                        (dataLog[(l + 1)] == 0x01 || 
-                         dataLog[(l + 1)] == 0x02 || 
-                         dataLog[(l + 1)] == 0x03 || 
-                         dataLog[(l + 1)] == 0x04 || 
-                         dataLog[(l + 1)] == 0x05 || 
-                         dataLog[(l + 1)] == 0x06 || 
-                         dataLog[(l + 1)] == 0x0F || 
+                    if (((dataLog[l] > 0) && (dataLog[l] < 249)) &&
+                        (dataLog[(l + 1)] == 0x01 ||
+                         dataLog[(l + 1)] == 0x02 ||
+                         dataLog[(l + 1)] == 0x03 ||
+                         dataLog[(l + 1)] == 0x04 ||
+                         dataLog[(l + 1)] == 0x05 ||
+                         dataLog[(l + 1)] == 0x06 ||
+                         dataLog[(l + 1)] == 0x0F ||
                          dataLog[(l + 1)] == 0x10 ||
                          dataLog[(l + 1)] == 0x81 ||
                          dataLog[(l + 1)] == 0x82 ||
@@ -75,18 +75,21 @@ namespace modbus_rtu_spy
                          dataLog[(l + 1)] == 0x90))
                     {
                         int LenghtFrame = (k + 3 - l);
-                        if (LenghtFrame > 256) {break;}
+                        if (LenghtFrame > 256) { break; }
 
                         Crc16(dataLog, LenghtFrame, l, ref CalcCRC);
-                        
-                        if (CalcCRC[0]  == dataLog[k + 3] && CalcCRC[1] == dataLog[k + 4])
+
+                        if (CalcCRC[0] == dataLog[k + 3] && CalcCRC[1] == dataLog[k + 4])
                         {
                             byte[] temp_frame = new byte[((k + 5) - l)];
                             Array.Copy(dataLog, l, temp_frame, 0, ((k + 5) - l));
                             farmelist.Add(temp_frame);
-                            l = k + 4;
                             break;
                         }
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
             }
@@ -94,6 +97,10 @@ namespace modbus_rtu_spy
             {
                 RawCom += string.Format("{0:X2}", hexstr) + " ";
             }
+
+            RawCom += Environment.NewLine;
+            RawCom += "----------------------------";
+            RawCom += Environment.NewLine;
 
             int countbyteidx = 0;
             foreach (var countframe in farmelist)
@@ -107,7 +114,7 @@ namespace modbus_rtu_spy
             for (int i = 0; i < (farmelist.Count - 1) ; i++)
             {
                 numberframe++;
-                if (farmelist[i][0] == farmelist[i + 1][0] && farmelist[i][1] == farmelist[i + 1][1])
+                if (farmelist[i][0] == farmelist[i + 1][0] && farmelist[i][1] == farmelist[i + 1][1] && farmelist[i].Length == 8)
                 {
                     LogCom += string.Format("{0:d5}", numberframe) + " : > ";
                     foreach (var strhex in farmelist[i])
@@ -135,6 +142,7 @@ namespace modbus_rtu_spy
                 }               
             }
 
+            LogCom += Environment.NewLine;
             LogCom += "----------------------------";
             LogCom += Environment.NewLine;
 
