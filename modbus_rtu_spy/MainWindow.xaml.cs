@@ -100,27 +100,29 @@ namespace modbus_rtu_spy
                 }
             }
 
-            for (int i = 1; i < farmelist.Count; i++)
+            for (int i = 0; i < farmelist.Count; i++)
             {
                 numberframe++;
-                if (farmelist[i - 1][0] == farmelist[i][0] && farmelist[i - 1][1] == farmelist[i][1] && farmelist[i - 1].Length == 8)
-                {
-                    LogCom += "10 " + string.Format("{0:d5}", numberframe) + " : > ";
-                    foreach (var strhex in farmelist[i - 1])
+                if ((i + 1) < farmelist.Count) {
+                    if (farmelist[i][0] == farmelist[i + 1][0] && farmelist[i][1] == farmelist[i + 1][1] && farmelist[i].Length == 8)
                     {
-                        LogCom += string.Format("{0:X2}", strhex) + " ";
+                        LogCom += "10 " + string.Format("{0:d5}", numberframe) + " : > ";
+                        foreach (var strhex in farmelist[i])
+                        {
+                            LogCom += string.Format("{0:X2}", strhex) + " ";
+                        }
+                        LogCom += Environment.NewLine;
+                        numberframe++;
+                        LogCom += "11 " + string.Format("{0:d5}", numberframe) + " : < ";
+                        foreach (var strhex in farmelist[i + 1])
+                        {
+                            LogCom += string.Format("{0:X2}", strhex) + " ";
+                        }
+                        LogCom += Environment.NewLine;
+                        i++;
                     }
-                    LogCom += Environment.NewLine;
-                    numberframe++;
-                    LogCom += "11 " + string.Format("{0:d5}", numberframe) + " : < ";
-                    foreach (var strhex in farmelist[i])
-                    {
-                        LogCom += string.Format("{0:X2}", strhex) + " ";
-                    }
-                    LogCom += Environment.NewLine;
-                    i++;
                 }
-                else if (i == 1)
+                else if (i == 0)
                 {
                     LogCom += "20 " + string.Format("{0:d5}", numberframe) + " : ? ";
                     foreach (var strhex in farmelist[i - 1])
@@ -146,7 +148,6 @@ namespace modbus_rtu_spy
 
             Dispatcher.Invoke(new Action(() =>
                 {
-                    differencelabel.Content = datareceive - countbyteidx;
                     countidxlabel.Content = countbyteidx;
                     lastframeidxlabel.Content = datareceive;
                     rtextboxRaw.AppendText(RawCom);
