@@ -1,11 +1,11 @@
-﻿<Window x:Class="modbus_rtu_spy.MainWindow"
+﻿<Window x:Name="Modbus_RTU_Spy" x:Class="modbus_rtu_spy.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:modbus_rtu_spy"
         mc:Ignorable="d"
-        Title="ModBus RTU Spy" Height="640" Width="800">
+        Title="ModBus RTU Spy" Height="640" Width="800" Icon="app.ico">
     <Grid>
         <GroupBox VerticalAlignment="Top" HorizontalAlignment="Left" Height="336">
             <GroupBox.Header>
@@ -13,9 +13,9 @@
             </GroupBox.Header>
             <Grid>
                 <Label Content="Port:" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top"/>
-                <ComboBox Name="cbx_Port" HorizontalAlignment="Left" Margin="58,10,0,0" VerticalAlignment="Top" Width="194" IsReadOnly="True" FontFamily="Consolas"/>
+                <ComboBox Name="cbx_Port" HorizontalAlignment="Left" Margin="58,10,0,0" VerticalAlignment="Top" Width="194" IsReadOnly="True" FontFamily="Consolas" SelectedIndex="0"/>
                 <Label Content="Speed:" HorizontalAlignment="Left" Margin="0,40,0,0" VerticalAlignment="Top"/>
-                <ComboBox Name="cbx_Speed" HorizontalAlignment="Left" Margin="58,40,0,0" VerticalAlignment="Top" Width="194" IsReadOnly="True" FontFamily="Consolas" SelectedIndex="6">
+                <ComboBox Name="cbx_Speed" HorizontalAlignment="Left" Margin="58,40,0,0" VerticalAlignment="Top" Width="194" IsReadOnly="True" FontFamily="Consolas" SelectedIndex="7">
                 </ComboBox>
                 <Label Content="Data:" HorizontalAlignment="Left" Margin="0,70,0,0" VerticalAlignment="Top"/>
                 <ComboBox Name="cbx_Data" HorizontalAlignment="Left" Margin="58,70,0,0" VerticalAlignment="Top" Width="194" IsReadOnly="True" FontFamily="Consolas" SelectedIndex="3">

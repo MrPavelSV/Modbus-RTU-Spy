@@ -106,14 +106,14 @@ namespace modbus_rtu_spy
                 if ((i + 1) < farmelist.Count) {
                     if (farmelist[i][0] == farmelist[i + 1][0] && farmelist[i][1] == farmelist[i + 1][1] && farmelist[i].Length == 8)
                     {
-                        LogCom += "10 " + string.Format("{0:d5}", numberframe) + " : > ";
+                        LogCom += DateTime.Now.ToString("HH:mm:ss:fff") + " " + string.Format("{0:d4}", numberframe) + " : > ";
                         foreach (var strhex in farmelist[i])
                         {
                             LogCom += string.Format("{0:X2}", strhex) + " ";
                         }
                         LogCom += Environment.NewLine;
                         numberframe++;
-                        LogCom += "11 " + string.Format("{0:d5}", numberframe) + " : < ";
+                        LogCom += DateTime.Now.ToString("HH:mm:ss:fff") + " "+ string.Format("{0:d4}", numberframe) + " : < ";
                         foreach (var strhex in farmelist[i + 1])
                         {
                             LogCom += string.Format("{0:X2}", strhex) + " ";
@@ -122,18 +122,9 @@ namespace modbus_rtu_spy
                         i++;
                     }
                 }
-                else if (i == 0)
-                {
-                    LogCom += "20 " + string.Format("{0:d5}", numberframe) + " : ? ";
-                    foreach (var strhex in farmelist[i - 1])
-                    {
-                        LogCom += string.Format("{0:X2}", strhex) + " ";
-                    }
-                    LogCom += Environment.NewLine;
-                }
                 else
                 {
-                    LogCom += "30 " + string.Format("{0:d5}", numberframe) + " : ? ";
+                    LogCom += DateTime.Now.ToString("HH:mm:ss:fff") + " " + string.Format("{0:d4}", numberframe) + " : ? ";
                     foreach (var strhex in farmelist[i])
                     {
                         LogCom += string.Format("{0:X2}", strhex) + " ";
