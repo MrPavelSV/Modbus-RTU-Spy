@@ -14,29 +14,17 @@ namespace modbus_rtu_spy
         public byte[] dataLog;
         public int numberframe;
         public Timer timer;
-        List<int> ports = new List<int>();
 
         public MainWindow()
         {
             InitializeComponent();
-            string[] portnames = SerialPort.GetPortNames();
-            SerialPort sp;
+            SerialCom sp = new SerialCom();
             numberframe = 0;
-
-            foreach (string portname in portnames)
-            {
-                ports.Add(int.Parse(portname.Substring(3)));
-            }
-            ports.Sort();
-
-            foreach (int portname in ports)
-            {
-                sp = new SerialPort("COM" + portname);
-                if (!sp.IsOpen)
-                {
-                    cbx_Port.Items.Add("COM" + portname);
-                }
-            }
+            cbx_Port.ItemsSource = sp.GetSerialPorts();
+            cbx_Parity.ItemsSource = sp.GetParity();
+            cbx_StopBits.ItemsSource = sp.GetStopBits();
+            cbx_Data.ItemsSource = sp.GetDataBits();
+            cbx_Speed.ItemsSource = sp.GetBaudRates();
         }
 
         private void OnTimedEvent(object state)
@@ -112,35 +100,44 @@ namespace modbus_rtu_spy
                 }
             }
 
-            for (int i = 0; i < (farmelist.Count - 1) ; i++)
+            for (int i = 1; i < farmelist.Count; i++)
             {
                 numberframe++;
-                if (farmelist[i][0] == farmelist[i + 1][0] && farmelist[i][1] == farmelist[i + 1][1] && farmelist[i].Length == 8)
+                if (farmelist[i - 1][0] == farmelist[i][0] && farmelist[i - 1][1] == farmelist[i][1] && farmelist[i - 1].Length == 8)
                 {
-                    LogCom += string.Format("{0:d5}", numberframe) + " : > ";
-                    foreach (var strhex in farmelist[i])
+                    LogCom += "10 " + string.Format("{0:d5}", numberframe) + " : > ";
+                    foreach (var strhex in farmelist[i - 1])
                     {
                         LogCom += string.Format("{0:X2}", strhex) + " ";
                     }
                     LogCom += Environment.NewLine;
                     numberframe++;
-                    LogCom += string.Format("{0:d5}", numberframe) + " : < ";
-                    foreach (var strhex in farmelist[i + 1])
+                    LogCom += "11 " + string.Format("{0:d5}", numberframe) + " : < ";
+                    foreach (var strhex in farmelist[i])
                     {
                         LogCom += string.Format("{0:X2}", strhex) + " ";
                     }
                     LogCom += Environment.NewLine;
                     i++;
                 }
+                else if (i == 1)
+                {
+                    LogCom += "20 " + string.Format("{0:d5}", numberframe) + " : ? ";
+                    foreach (var strhex in farmelist[i - 1])
+                    {
+                        LogCom += string.Format("{0:X2}", strhex) + " ";
+                    }
+                    LogCom += Environment.NewLine;
+                }
                 else
                 {
-                    LogCom += string.Format("{0:d5}", numberframe) + " : ? ";
+                    LogCom += "30 " + string.Format("{0:d5}", numberframe) + " : ? ";
                     foreach (var strhex in farmelist[i])
                     {
                         LogCom += string.Format("{0:X2}", strhex) + " ";
                     }
                     LogCom += Environment.NewLine;
-                }               
+                }
             }
 
             LogCom += Environment.NewLine;
@@ -202,7 +199,7 @@ namespace modbus_rtu_spy
 
             if (cbx_Port.Text.Contains("COM"))
             {
-                comname = cbx_Port.Text;
+                comname = cbx_Port.Text.Substring(cbx_Port.Text.IndexOf("COM"), cbx_Port.Text.IndexOf(":")-1);
             }
             else
             {
@@ -213,7 +210,7 @@ namespace modbus_rtu_spy
             com_spy = new SerialPort(comname);
 
             if (!com_spy.IsOpen)
-            {          
+            {
                 com_spy.BaudRate = combd;
                 com_spy.Parity = tParity;
                 com_spy.DataBits = idatabits;

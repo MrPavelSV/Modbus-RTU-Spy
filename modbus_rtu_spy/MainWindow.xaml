@@ -16,37 +16,15 @@
                 <ComboBox Name="cbx_Port" HorizontalAlignment="Left" Margin="132,10,0,0" VerticalAlignment="Top" Width="120" IsReadOnly="True" FontFamily="Consolas"/>
                 <Label Content="Speed" HorizontalAlignment="Left" Margin="0,40,0,0" VerticalAlignment="Top"/>
                 <ComboBox Name="cbx_Speed" HorizontalAlignment="Left" Margin="132,40,0,0" VerticalAlignment="Top" Width="120" IsReadOnly="True" FontFamily="Consolas" SelectedIndex="6">
-                    <ComboBoxItem Content="300" HorizontalAlignment="Left" Width="118"/>
-                    <ComboBoxItem Content="600" HorizontalAlignment="Left" Width="118"/>
-                    <ComboBoxItem Content="1200" HorizontalAlignment="Left" Width="118"/>
-                    <ComboBoxItem Content="2400" HorizontalAlignment="Left" Width="118"/>
-                    <ComboBoxItem Content="4800" HorizontalAlignment="Left" Width="118"/>
-                    <ComboBoxItem Content="9600" HorizontalAlignment="Left" Width="118"/>
-                    <ComboBoxItem Content="19200" HorizontalAlignment="Left" Width="118"/>
-                    <ComboBoxItem Content="38400" HorizontalAlignment="Left" Width="118"/>
-                    <ComboBoxItem Content="57600" HorizontalAlignment="Left" Width="118"/>
-                    <ComboBoxItem Content="115200" HorizontalAlignment="Left" Width="118"/>
                 </ComboBox>
                 <Label Content="Data" HorizontalAlignment="Left" Margin="0,70,0,0" VerticalAlignment="Top"/>
                 <ComboBox Name="cbx_Data" HorizontalAlignment="Left" Margin="132,70,0,0" VerticalAlignment="Top" Width="120" IsReadOnly="True" FontFamily="Consolas" SelectedIndex="3">
-                    <ComboBoxItem Content="5" HorizontalAlignment="Left" Width="118"/>
-                    <ComboBoxItem Content="6" HorizontalAlignment="Left" Width="118"/>
-                    <ComboBoxItem Content="7" HorizontalAlignment="Left" Width="118"/>
-                    <ComboBoxItem Content="8" HorizontalAlignment="Left" Width="118"/>
                 </ComboBox>
                 <Label Content="Parity" HorizontalAlignment="Left" Margin="0,100,0,0" VerticalAlignment="Top"/>
-                <ComboBox Name="cbx_Parity" HorizontalAlignment="Left" Margin="132,100,0,0" VerticalAlignment="Top" Width="120" IsReadOnly="True" FontFamily="Consolas" SelectedIndex="2">
-                    <ComboBoxItem Content="Even" HorizontalAlignment="Left" Width="118"/>
-                    <ComboBoxItem Content="Mark" HorizontalAlignment="Left" Width="118"/>
-                    <ComboBoxItem Content="None" HorizontalAlignment="Left" Width="118"/>
-                    <ComboBoxItem Content="Odd" HorizontalAlignment="Left" Width="118"/>
-                    <ComboBoxItem Content="Space" HorizontalAlignment="Left" Width="118"/>
+                <ComboBox Name="cbx_Parity" HorizontalAlignment="Left" Margin="132,100,0,0" VerticalAlignment="Top" Width="120" IsReadOnly="True" FontFamily="Consolas" SelectedIndex="0">
                 </ComboBox>
                 <Label Content="StopBits" HorizontalAlignment="Left" Margin="0,130,0,0" VerticalAlignment="Top"/>
-                <ComboBox  Name="cbx_StopBits" HorizontalAlignment="Left" Margin="132,130,0,0" VerticalAlignment="Top" Width="120" IsReadOnly="True" FontFamily="Consolas" SelectedIndex="0">
-                    <ComboBoxItem Content="One" HorizontalAlignment="Left" Width="118"/>
-                    <ComboBoxItem Content="OnePointFive" HorizontalAlignment="Left" Width="118"/>
-                    <ComboBoxItem Content="Two" HorizontalAlignment="Left" Width="118"/>
+                <ComboBox  Name="cbx_StopBits" HorizontalAlignment="Left" Margin="132,130,0,0" VerticalAlignment="Top" Width="120" IsReadOnly="True" FontFamily="Consolas" SelectedIndex="1">
                 </ComboBox>
                 <Button Name="Open_port"  Content="Open" HorizontalAlignment="Left" Margin="38,194,0,0" VerticalAlignment="Top" Width="75" Click="OpenComPort"/>
                 <Button Name="Close_port" Content="Close" HorizontalAlignment="Left" Margin="156,194,0,0" VerticalAlignment="Top" Width="74" Click="CloseComPort"/>
@@ -64,7 +42,8 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <RichTextBox Grid.Column="0"  Name="rtextbox" FontFamily="Consolas" Width="Auto" VerticalScrollBarVisibility="Auto">
+            <Label Grid.Column="0" Content="Parse" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <RichTextBox Grid.Column="0"  Name="rtextbox" FontFamily="Consolas" Width="Auto" VerticalScrollBarVisibility="Auto" Margin="0,26,0,0">
                 <FlowDocument>
                     <Paragraph>
                         <Run Text=""/>
@@ -72,7 +51,8 @@
                 </FlowDocument>
             </RichTextBox>
             <GridSplitter Grid.Column="1" ShowsPreview="False" Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
-            <RichTextBox Grid.Column="2" Name="rtextboxRaw" FontFamily="Consolas" Width="Auto"  VerticalScrollBarVisibility="Auto">
+            <Label Grid.Column="2" Content="Raw" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <RichTextBox Grid.Column="2" Name="rtextboxRaw" FontFamily="Consolas" Width="Auto"  VerticalScrollBarVisibility="Auto" Margin="0,26,0, 0">
                 <FlowDocument>
                     <Paragraph>
                         <Run Text=""/>
