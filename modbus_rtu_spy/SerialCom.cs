@@ -8,7 +8,6 @@ using System.Management;
 
 internal class ProcessConnection
 {
-
     public static ConnectionOptions ProcessConnectionOptions()
     {
         ConnectionOptions options = new ConnectionOptions
@@ -31,7 +30,6 @@ internal class ProcessConnection
         connectScope.Connect();
         return connectScope;
     }
-
 }
 
 public class COMPortInfo : IComparable<COMPortInfo>

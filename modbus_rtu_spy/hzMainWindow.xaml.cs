@@ -11,7 +11,7 @@ namespace modbus_rtu_spy
         public SerialPort com_spy;
         public string LogCom;
         public string RawCom;
-        public byte[] dataLog;
+        //public byte[] dataLog;
         public int numberframe;
         public System.Threading.Timer timer;
 
@@ -30,23 +30,23 @@ namespace modbus_rtu_spy
         private void OnTimedEvent(object state)
         {
             if (!com_spy.IsOpen) return;
+            byte[] dataLog;
+            int conuntByteread = com_spy.BytesToRead;
+            dataLog = new byte[conuntByteread];
+            com_spy.Read(dataLog, 0, conuntByteread);
+            if (dataLog.Length == 0) return;
 
             int k = 0;
             int l = 0;
             numberframe = 0;
             LogCom = "";
             RawCom = "";
-
             List<byte[]> farmelist = new List<byte[]>();
+            byte[] CalcCRC = new byte[2];
 
-            int datareceive = com_spy.BytesToRead;
-            if (datareceive == 0) return;
-            byte[] dataLog = new byte[datareceive];
-            com_spy.Read(dataLog, 0, datareceive);
-
-            for (l = 0; l < (datareceive - 4); l++)
+            for (l = 0; l < (conuntByteread - 5); )
             {
-                for (k = l; k < (datareceive - 4); k++)
+                for (k = l; k < (conuntByteread - 5); k++)
                 {
                     if (((dataLog[l] > 0) && (dataLog[l] < 249)) &&
                         (dataLog[(l + 1)] == 0x01 ||
@@ -67,7 +67,6 @@ namespace modbus_rtu_spy
                     {
                         int LenghtFrame = (k + 3 - l);
                         if (LenghtFrame > 256) { break; }
-                        byte[] CalcCRC = new byte[2];
 
                         Crc16(dataLog, LenghtFrame, l, ref CalcCRC);
 
@@ -76,6 +75,7 @@ namespace modbus_rtu_spy
                             byte[] temp_frame = new byte[((k + 5) - l)];
                             Array.Copy(dataLog, l, temp_frame, 0, ((k + 5) - l));
                             farmelist.Add(temp_frame);
+                            l = k + 4;
                             break;
                         }
                     }
@@ -143,7 +143,7 @@ namespace modbus_rtu_spy
             Dispatcher.Invoke(new Action(() =>
                 {
                     countidxlabel.Content = countbyteidx;
-                    lastframeidxlabel.Content = datareceive;
+                    lastframeidxlabel.Content = dataLog.Length;
                     rtextboxRaw.AppendText(RawCom);
                     rtextbox.AppendText(LogCom);
                     rtextbox.ScrollToEnd();
