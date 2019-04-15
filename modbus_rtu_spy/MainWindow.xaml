@@ -26,11 +26,11 @@
                 <Label Content="StopBits:" HorizontalAlignment="Left" Margin="0,130,0,0" VerticalAlignment="Top"/>
                 <ComboBox  Name="cbx_StopBits" HorizontalAlignment="Left" Margin="58,130,0,0" VerticalAlignment="Top" Width="194" IsReadOnly="True" FontFamily="Consolas" SelectedIndex="1">
                 </ComboBox>
-                <Button Name="Open_port"  Content="Open" HorizontalAlignment="Left" Margin="38,194,0,0" VerticalAlignment="Top" Width="75" Click="OpenComPort"/>
-                <Button Name="Close_port" Content="Close" HorizontalAlignment="Left" Margin="156,194,0,0" VerticalAlignment="Top" Width="74" Click="CloseComPort"/>
-                <Button Name="Clear_text" Content="Clear" HorizontalAlignment="Left" Margin="100,230,0,0" VerticalAlignment="Top" Width="74" Click="Clear"/>
-                <Label Content="Capture Period (ms):" HorizontalAlignment="Left" Margin="0,160,0,0" VerticalAlignment="Top"/>
-                <TextBox Name ="Capptextb" HorizontalAlignment="Left" Height="23" Margin="120,160,0,0" VerticalAlignment="Top" Width="130" FontFamily="Consolas" VerticalContentAlignment="Center" Text="3000" TextChanged="Capptextb_TextChanged"/>
+                <Button Name="Open_port"  Content="Open" HorizontalAlignment="Left" Margin="38,234,0,0" VerticalAlignment="Top" Width="75" Click="OpenComPort"/>
+                <Button Name="Close_port" Content="Close" HorizontalAlignment="Left" Margin="156,234,0,0" VerticalAlignment="Top" Width="74" Click="CloseComPort"/>
+                <Button Name="Clear_text" Content="Clear" HorizontalAlignment="Left" Margin="100,270,0,0" VerticalAlignment="Top" Width="74" Click="Clear"/>
+                <Label Content="Capture Period (ms):" HorizontalAlignment="Left" Margin="0,200,0,0" VerticalAlignment="Top"/>
+                <TextBox Name ="Capptextb" HorizontalAlignment="Left" Height="23" Margin="120,200,0,0" VerticalAlignment="Top" Width="130" FontFamily="Consolas" VerticalContentAlignment="Center" Text="3000" TextChanged="Capptextb_TextChanged"/>
             </Grid>
         </GroupBox>
         <Grid VerticalAlignment="Top" Margin="269,10,0,0" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="2" Grid.RowSpan="1" Grid.ColumnSpan="2">

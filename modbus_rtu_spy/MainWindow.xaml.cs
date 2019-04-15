@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
 using System.IO.Ports;
-using System.Threading;
 using System.Collections.Generic;
 
 namespace modbus_rtu_spy
@@ -20,29 +19,35 @@ namespace modbus_rtu_spy
             InitializeComponent();
             SerialCom sp = new SerialCom();
             numberframe = 0;
-            cbx_Port.ItemsSource = sp.GetSerialPorts();
-            cbx_Parity.ItemsSource = sp.GetParity();
+            cbx_Port.ItemsSource     = sp.GetSerialPorts();
+            cbx_Parity.ItemsSource   = sp.GetParity();
             cbx_StopBits.ItemsSource = sp.GetStopBits();
-            cbx_Data.ItemsSource = sp.GetDataBits();
-            cbx_Speed.ItemsSource = sp.GetBaudRates();
+            cbx_Data.ItemsSource     = sp.GetDataBits();
+            cbx_Speed.ItemsSource    = sp.GetBaudRates();
         }
 
         private void OnTimedEvent(object state)
         {
             if (!com_spy.IsOpen) return;
+            if (com_spy.BytesToRead == 0) return;
+
+            int datareceive = 0;
+
+            try
+            {
+                datareceive = com_spy.Read(dataLog = new byte[com_spy.BytesToRead], 0, dataLog.Length);
+            }
+            catch
+            {
+                return;
+            }
 
             int k = 0;
             int l = 0;
             numberframe = 0;
             LogCom = "";
             RawCom = "";
-
             List<byte[]> farmelist = new List<byte[]>();
-
-            int datareceive = com_spy.BytesToRead;
-            if (datareceive == 0) return;
-            byte[] dataLog = new byte[datareceive];
-            com_spy.Read(dataLog, 0, datareceive);
 
             for (l = 0; l < (datareceive - 4); l++)
             {
