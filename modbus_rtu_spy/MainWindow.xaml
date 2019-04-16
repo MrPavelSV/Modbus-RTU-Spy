@@ -42,6 +42,11 @@
             <Label Grid.Column="0" Content="Parse" HorizontalAlignment="Center" VerticalAlignment="Top"/>
             <Label Grid.Column="0" Name ="lastframeidxlabel" Content="" HorizontalAlignment="Right" VerticalAlignment="Top" Width="60"/>
             <RichTextBox Grid.Column="0"  Name="rtextbox" FontFamily="Consolas" Width="Auto" VerticalScrollBarVisibility="Auto" Margin="0,26,0,0">
+                <RichTextBox.Resources>
+                    <Style TargetType="{x:Type Paragraph}">
+                        <Setter Property="Margin" Value="0" />
+                    </Style>
+                </RichTextBox.Resources>
                 <FlowDocument>
                     <Paragraph>
                         <Run Text=""/>

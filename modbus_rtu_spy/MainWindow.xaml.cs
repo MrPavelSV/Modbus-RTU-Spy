@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Windows;
 using System.IO.Ports;
+
 using System.Collections.Generic;
+using System.Linq;
 
 namespace modbus_rtu_spy
 {
@@ -11,14 +13,12 @@ namespace modbus_rtu_spy
         public string LogCom;
         public string RawCom;
         public byte[] dataLog;
-        public int numberframe;
         public System.Threading.Timer timer;
 
         public MainWindow()
         {
             InitializeComponent();
             SerialCom sp = new SerialCom();
-            numberframe = 0;
             cbx_Port.ItemsSource     = sp.GetSerialPorts();
             cbx_Parity.ItemsSource   = sp.GetParity();
             cbx_StopBits.ItemsSource = sp.GetStopBits();
@@ -44,10 +44,11 @@ namespace modbus_rtu_spy
 
             int k = 0;
             int l = 0;
-            numberframe = 0;
+            int numberframe = 0;
             LogCom = "";
             RawCom = "";
             List<byte[]> farmelist = new List<byte[]>();
+            string DataStr = DateTime.Now.ToString("HH:mm:ss:fff") + " ";
 
             for (l = 0; l < (datareceive - 4); l++)
             {
@@ -96,7 +97,7 @@ namespace modbus_rtu_spy
             }
 
             RawCom += Environment.NewLine;
-            RawCom += "----------------------------";
+            RawCom += DataStr + "----------------------------";
             RawCom += Environment.NewLine;
 
             int countbyteidx = 0;
@@ -111,38 +112,35 @@ namespace modbus_rtu_spy
             for (int i = 0; i < farmelist.Count; i++)
             {
                 numberframe++;
-                if ((i + 1) < farmelist.Count) {
+                if ((i + 1) < farmelist.Count)
+                {
                     if (farmelist[i][0] == farmelist[i + 1][0] && farmelist[i][1] == farmelist[i + 1][1] && farmelist[i].Length == 8)
                     {
-                        LogCom += DateTime.Now.ToString("HH:mm:ss:fff") + " " + string.Format("{0:d4}", numberframe) + " : > ";
-                        foreach (var strhex in farmelist[i])
-                        {
-                            LogCom += string.Format("{0:X2}", strhex) + " ";
-                        }
-                        LogCom += Environment.NewLine;
-                        numberframe++;
-                        LogCom += DateTime.Now.ToString("HH:mm:ss:fff") + " "+ string.Format("{0:d4}", numberframe) + " : < ";
-                        foreach (var strhex in farmelist[i + 1])
-                        {
-                            LogCom += string.Format("{0:X2}", strhex) + " ";
-                        }
-                        LogCom += Environment.NewLine;
-                        i++;
+                        LogCom += LogFrame(farmelist[i], ">", numberframe);
+                        continue;
                     }
                 }
-                else
+                if (i > 0)
                 {
-                    LogCom += DateTime.Now.ToString("HH:mm:ss:fff") + " " + string.Format("{0:d4}", numberframe) + " : ? ";
-                    foreach (var strhex in farmelist[i])
+                    if (farmelist[i][0] == farmelist[i - 1][0] && farmelist[i][1] == farmelist[i - 1][1] && farmelist[i].Length != 8 && (farmelist[i][1] == 0x03 || farmelist[i][1] == 0x04))
                     {
-                        LogCom += string.Format("{0:X2}", strhex) + " ";
+                        if (farmelist[i][2] == (((ushort)((ushort)farmelist[i - 1][4] << 8 | farmelist[i - 1][5]))*2))
+                        {
+                            LogCom += LogFrame(farmelist[i], "<", numberframe);
+                            continue;
+                        }
                     }
-                    LogCom += Environment.NewLine;
+                    if (Enumerable.SequenceEqual(farmelist[i], farmelist[i - 1]) && (farmelist[i][1] == 0x05 || farmelist[i][1] == 0x06))
+                    {
+                        LogCom += LogFrame(farmelist[i], "<", numberframe);
+                        continue;
+                    }
                 }
+                LogCom += LogFrame(farmelist[i], "?", numberframe);
             }
 
             LogCom += Environment.NewLine;
-            LogCom += "----------------------------";
+            LogCom += DataStr + "----------------------------";
             LogCom += Environment.NewLine;
 
             Dispatcher.Invoke(new Action(() =>
@@ -157,12 +155,24 @@ namespace modbus_rtu_spy
             ));
         }
 
+        private string LogFrame(byte[] frame, string direction, int _numberframe)
+        {
+            string retstring = "";
+            retstring += string.Format("{0:d4}", _numberframe) + " : " + direction + " ";
+            foreach (var strhex in frame)
+            {
+                retstring += string.Format("{0:X2}", strhex) + " ";
+            }
+            retstring += Environment.NewLine;
+            return retstring;
+        }
+
         private void OpenComPort(object sender, RoutedEventArgs e)
         {
-            string comname = cbx_Port.Text;
+            string comname  = cbx_Port.Text;
             string baudrate = cbx_Speed.Text;
             string paritycb = cbx_Parity.Text;
-            string stopbcb = cbx_StopBits.Text;
+            string stopbcb  = cbx_StopBits.Text;
             string databits = cbx_Data.Text;
 
             Parity tParity;
@@ -211,22 +221,23 @@ namespace modbus_rtu_spy
 
             if (!com_spy.IsOpen)
             {
-                com_spy.BaudRate = combd;
-                com_spy.Parity = tParity;
-                com_spy.DataBits = idatabits;
-                com_spy.StopBits = stopBits;
+                com_spy.BaudRate       = combd;
+                com_spy.Parity         = tParity;
+                com_spy.DataBits       = idatabits;
+                com_spy.StopBits       = stopBits;
                 com_spy.ReadBufferSize = 8192;
-                Open_port.IsEnabled = false;
-                cbx_Data.IsEnabled = false;
-                cbx_Parity.IsEnabled = false;
-                cbx_Port.IsEnabled = false;
-                cbx_Speed.IsEnabled = false;
+                Open_port.IsEnabled    = false;
+                cbx_Data.IsEnabled     = false;
+                cbx_Parity.IsEnabled   = false;
+                cbx_Port.IsEnabled     = false;
+                cbx_Speed.IsEnabled    = false;
                 cbx_StopBits.IsEnabled = false;
-                Capptextb.IsEnabled = false;
-                Close_port.IsEnabled = true;
+                Capptextb.IsEnabled    = false;
+                Close_port.IsEnabled   = true;
                 com_spy.Open();
                 
                 timer = new System.Threading.Timer(OnTimedEvent);
+
                 try
                 {
                     timer.Change(0, ushort.Parse(Capptextb.Text));
@@ -248,15 +259,15 @@ namespace modbus_rtu_spy
                     timer.Dispose();
                     com_spy.Close();
                     com_spy.Dispose();
-                    Open_port.IsEnabled = true;
-                    Open_port.IsEnabled = true;
-                    cbx_Data.IsEnabled = true;
-                    cbx_Parity.IsEnabled = true;
-                    cbx_Port.IsEnabled = true;
-                    cbx_Speed.IsEnabled = true;
+                    Open_port.IsEnabled    = true;
+                    Open_port.IsEnabled    = true;
+                    cbx_Data.IsEnabled     = true;
+                    cbx_Parity.IsEnabled   = true;
+                    cbx_Port.IsEnabled     = true;
+                    cbx_Speed.IsEnabled    = true;
                     cbx_StopBits.IsEnabled = true;
-                    Capptextb.IsEnabled = true;
-                    Close_port.IsEnabled = false;
+                    Capptextb.IsEnabled    = true;
+                    Close_port.IsEnabled   = false;
                 }
             }
         }
@@ -265,7 +276,6 @@ namespace modbus_rtu_spy
         {
             rtextbox.Document.Blocks.Clear();
             rtextboxRaw.Document.Blocks.Clear();
-            numberframe = 0;
         }
 
         private void Capptextb_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
