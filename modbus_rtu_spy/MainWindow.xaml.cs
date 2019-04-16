@@ -12,7 +12,6 @@ namespace modbus_rtu_spy
         public SerialPort com_spy;
         public string LogCom;
         public string RawCom;
-        public byte[] dataLog;
         public System.Threading.Timer timer;
 
         public MainWindow()
@@ -32,15 +31,10 @@ namespace modbus_rtu_spy
             if (com_spy.BytesToRead == 0) return;
 
             int datareceive = 0;
+            byte[] dataLog;
 
-            try
-            {
-                datareceive = com_spy.Read(dataLog = new byte[com_spy.BytesToRead], 0, dataLog.Length);
-            }
-            catch
-            {
-                return;
-            }
+            try   { datareceive = com_spy.Read(dataLog = new byte[com_spy.BytesToRead], 0, dataLog.Length); }
+            catch { return; }
 
             int k = 0;
             int l = 0;
@@ -82,6 +76,7 @@ namespace modbus_rtu_spy
                             byte[] temp_frame = new byte[((k + 5) - l)];
                             Array.Copy(dataLog, l, temp_frame, 0, ((k + 5) - l));
                             farmelist.Add(temp_frame);
+                            l = k + 4;
                             break;
                         }
                     }
@@ -116,7 +111,7 @@ namespace modbus_rtu_spy
                 {
                     if (farmelist[i][0] == farmelist[i + 1][0] && farmelist[i][1] == farmelist[i + 1][1] && farmelist[i].Length == 8)
                     {
-                        LogCom += LogFrame(farmelist[i], ">", numberframe);
+                        LogCom += LogFrame(farmelist[i], "=>", numberframe);
                         continue;
                     }
                 }
@@ -126,17 +121,17 @@ namespace modbus_rtu_spy
                     {
                         if (farmelist[i][2] == (((ushort)((ushort)farmelist[i - 1][4] << 8 | farmelist[i - 1][5]))*2))
                         {
-                            LogCom += LogFrame(farmelist[i], "<", numberframe);
+                            LogCom += LogFrame(farmelist[i], "<=", numberframe);
                             continue;
                         }
                     }
                     if (Enumerable.SequenceEqual(farmelist[i], farmelist[i - 1]) && (farmelist[i][1] == 0x05 || farmelist[i][1] == 0x06))
                     {
-                        LogCom += LogFrame(farmelist[i], "<", numberframe);
+                        LogCom += LogFrame(farmelist[i], "<=", numberframe);
                         continue;
                     }
                 }
-                LogCom += LogFrame(farmelist[i], "?", numberframe);
+                LogCom += LogFrame(farmelist[i], "??", numberframe);
             }
 
             LogCom += Environment.NewLine;
