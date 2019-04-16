@@ -92,7 +92,7 @@ namespace modbus_rtu_spy
             }
 
             RawCom += Environment.NewLine;
-            RawCom += DataStr + "----------------------------";
+            RawCom += DataStr + "[" + datareceive + "] bytes ----------------------------";
             RawCom += Environment.NewLine;
 
             int countbyteidx = 0;
@@ -135,13 +135,11 @@ namespace modbus_rtu_spy
             }
 
             LogCom += Environment.NewLine;
-            LogCom += DataStr + "----------------------------";
+            LogCom += DataStr + "[" + countbyteidx + "] bytes ----------------------------";
             LogCom += Environment.NewLine;
 
             Dispatcher.Invoke(new Action(() =>
                 {
-                    countidxlabel.Content = countbyteidx;
-                    lastframeidxlabel.Content = datareceive;
                     rtextboxRaw.AppendText(RawCom);
                     rtextbox.AppendText(LogCom);
                     rtextbox.ScrollToEnd();

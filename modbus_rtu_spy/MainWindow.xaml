@@ -40,7 +40,6 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Content="Parse" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-            <Label Grid.Column="0" Name ="lastframeidxlabel" Content="" HorizontalAlignment="Right" VerticalAlignment="Top" Width="60"/>
             <RichTextBox Grid.Column="0"  Name="rtextbox" FontFamily="Consolas" Width="Auto" VerticalScrollBarVisibility="Auto" Margin="0,26,0,0">
                 <RichTextBox.Resources>
                     <Style TargetType="{x:Type Paragraph}">
@@ -55,7 +54,6 @@
             </RichTextBox>
             <GridSplitter Grid.Column="1" ShowsPreview="False" Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
             <Label Grid.Column="2" Content="Raw" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-            <Label Grid.Column="2" Name ="countidxlabel" Content="" HorizontalAlignment="Right" VerticalAlignment="Top" Width="60"/>
             <RichTextBox Grid.Column="2" Name="rtextboxRaw" FontFamily="Consolas" Width="Auto"  VerticalScrollBarVisibility="Auto" Margin="0,26,0, 0">
                 <FlowDocument>
                     <Paragraph>
