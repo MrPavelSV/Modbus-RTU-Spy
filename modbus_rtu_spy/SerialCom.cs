@@ -84,17 +84,6 @@ namespace modbus_rtu_spy
         {
         }
 
-        //public bool Open()
-        //{
-        //    serialPort = new SerialPort();
-        //    if (!serialPort.IsOpen)
-        //    {
-        //        serialPort.Open();
-        //        return true;
-        //    }
-        //    return false;
-        //}
-
         public List <string> GetSerialPorts()
         {
             List<string> available_ports = new List<string>();
