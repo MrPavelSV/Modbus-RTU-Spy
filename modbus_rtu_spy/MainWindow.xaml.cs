@@ -23,6 +23,7 @@ namespace modbus_rtu_spy
             cbx_StopBits.ItemsSource = sp.GetStopBits();
             cbx_Data.ItemsSource     = sp.GetDataBits();
             cbx_Speed.ItemsSource    = sp.GetBaudRates();
+            cbx_Handshake.ItemsSource = sp.GetHandshake();
         }
 
         private void OnTimedEvent(object state)
@@ -86,13 +87,18 @@ namespace modbus_rtu_spy
                     }
                 }
             }
+
+            RawCom += Environment.NewLine;
+            RawCom += "[start capture]" + "----------------------------";
+            RawCom += Environment.NewLine;
+
             foreach (var hexstr in dataLog)
             {
                 RawCom += string.Format("{0:X2}", hexstr) + " ";
             }
 
             RawCom += Environment.NewLine;
-            RawCom += DataStr + "[" + datareceive + "] bytes ----------------------------";
+            RawCom += "[end capture] " + DataStr + "[" + datareceive + "] bytes ----------------------------";
             RawCom += Environment.NewLine;
 
             int countbyteidx = 0;
@@ -104,6 +110,11 @@ namespace modbus_rtu_spy
                 }
             }
 
+
+            LogCom += Environment.NewLine;
+            LogCom += "[start capture]" + "----------------------------";
+            LogCom += Environment.NewLine;
+
             for (int i = 0; i < farmelist.Count; i++)
             {
                 numberframe++;
@@ -111,7 +122,7 @@ namespace modbus_rtu_spy
                 {
                     if (farmelist[i][0] == farmelist[i + 1][0] && farmelist[i][1] == farmelist[i + 1][1] && farmelist[i].Length == 8)
                     {
-                        LogCom += LogFrame(farmelist[i], "=>", numberframe);
+                        LogCom += LogFrame(farmelist[i], "master=>", numberframe);
                         continue;
                     }
                 }
@@ -121,21 +132,20 @@ namespace modbus_rtu_spy
                     {
                         if (farmelist[i][2] == (((ushort)((ushort)farmelist[i - 1][4] << 8 | farmelist[i - 1][5]))*2))
                         {
-                            LogCom += LogFrame(farmelist[i], "<=", numberframe);
+                            LogCom += LogFrame(farmelist[i], "<= slave", numberframe);
                             continue;
                         }
                     }
                     if (Enumerable.SequenceEqual(farmelist[i], farmelist[i - 1]) && (farmelist[i][1] == 0x05 || farmelist[i][1] == 0x06))
                     {
-                        LogCom += LogFrame(farmelist[i], "<=", numberframe);
+                        LogCom += LogFrame(farmelist[i], "<= slave", numberframe);
                         continue;
                     }
                 }
                 LogCom += LogFrame(farmelist[i], "??", numberframe);
             }
 
-            LogCom += Environment.NewLine;
-            LogCom += DataStr + "[" + countbyteidx + "] bytes ----------------------------";
+            LogCom += "[end capture] " + DataStr + "[" + countbyteidx + "] bytes ----------------------------";
             LogCom += Environment.NewLine;
 
             Dispatcher.Invoke(new Action(() =>

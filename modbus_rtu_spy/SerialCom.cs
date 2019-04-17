@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO.Ports;
 using System.Management;
 
@@ -83,35 +80,24 @@ namespace modbus_rtu_spy
 {
     class SerialCom
     {
-        private SerialPort serialPort;
-
         public SerialCom()
         {
         }
 
-        public bool Open()
-        {
-            serialPort = new SerialPort();
-            if (!serialPort.IsOpen)
-            {
-                serialPort.Open();
-                return true;
-            }
-            return false;
-        }
+        //public bool Open()
+        //{
+        //    serialPort = new SerialPort();
+        //    if (!serialPort.IsOpen)
+        //    {
+        //        serialPort.Open();
+        //        return true;
+        //    }
+        //    return false;
+        //}
 
         public List <string> GetSerialPorts()
         {
-            List<int> ports = new List<int>();
-            List<string> portnames = new List<string>(SerialPort.GetPortNames());
             List<string> available_ports = new List<string>();
-
-            foreach (string portname in portnames)
-            {
-                ports.Add(int.Parse(portname.Substring(3)));
-            }
-            ports.Sort();
-
             List<COMPortInfo> SerialInfo = new List<COMPortInfo>(COMPortInfo.GetCOMPortsInfo());
 
             SerialInfo.Sort();
@@ -148,5 +134,9 @@ namespace modbus_rtu_spy
             return new List<string> (){"300","600","1200","2400","4800","9600","14400","19200","28800","38400","56000","57600","115200","128000","256000"};
         }
 
+        public List<string> GetHandshake()
+        {
+            return new List<string>(Enum.GetNames(typeof(Handshake)));
+        }
     }
 }
