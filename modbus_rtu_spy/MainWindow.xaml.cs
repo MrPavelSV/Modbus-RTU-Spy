@@ -1,13 +1,33 @@
 ﻿using System;
-using System.Windows;
-using System.IO.Ports;
-
-using System.Collections.Generic;
 using System.Linq;
+using System.IO.Ports;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Media;
+using System.Windows.Documents;
+using System.Windows.Controls;
 
 namespace modbus_rtu_spy
 {
-    public partial class MainWindow : Window , IDisposable
+    public static class RichTextBoxExt
+    {
+        public static void AppendText(this RichTextBox rtextbox, string text, string color)
+        {
+            BrushConverter bc = new BrushConverter();
+            TextRange tr = new TextRange(rtextbox.Document.ContentEnd, rtextbox.Document.ContentEnd)
+            {
+                Text = text
+            };
+
+            try
+            {
+                tr.ApplyPropertyValue(TextElement.ForegroundProperty, bc.ConvertFromString(color));
+            }
+            catch (FormatException) { }
+        }
+    }
+
+    public partial class MainWindow : Window, IDisposable
     {
         public SerialPort com_spy;
         public string LogCom;
@@ -18,11 +38,11 @@ namespace modbus_rtu_spy
         {
             InitializeComponent();
             SerialCom sp = new SerialCom();
-            cbx_Port.ItemsSource     = sp.GetSerialPorts();
-            cbx_Parity.ItemsSource   = sp.GetParity();
+            cbx_Port.ItemsSource = sp.GetSerialPorts();
+            cbx_Parity.ItemsSource = sp.GetParity();
             cbx_StopBits.ItemsSource = sp.GetStopBits();
-            cbx_Data.ItemsSource     = sp.GetDataBits();
-            cbx_Speed.ItemsSource    = sp.GetBaudRates();
+            cbx_Data.ItemsSource = sp.GetDataBits();
+            cbx_Speed.ItemsSource = sp.GetBaudRates();
             cbx_Handshake.ItemsSource = sp.GetHandshake();
         }
 
@@ -32,9 +52,15 @@ namespace modbus_rtu_spy
             if (com_spy.BytesToRead == 0) return;
 
             int datareceive = 0;
+            //Queue<byte> recievedData = new Queue<byte>();
             byte[] dataLog;
 
-            try   { datareceive = com_spy.Read(dataLog = new byte[com_spy.BytesToRead], 0, dataLog.Length); }
+            try
+            {
+                datareceive = com_spy.Read(dataLog = new byte[com_spy.BytesToRead], 0, dataLog.Length);
+                //dataLog.ToList().ForEach(b => recievedData.Enqueue(b));
+                //var packet = Enumerable.Range(0, 50).Select(i => recievedData.Dequeue());
+            }
             catch { return; }
 
             int k = 0;
@@ -111,9 +137,9 @@ namespace modbus_rtu_spy
             }
 
 
-            LogCom += Environment.NewLine;
-            LogCom += "[start capture]" + "----------------------------";
-            LogCom += Environment.NewLine;
+            ToLog(Environment.NewLine, "black");
+            ToLog("[start capture]" + "----------------------------", "black");
+            ToLog(Environment.NewLine, "black");
 
             for (int i = 0; i < farmelist.Count; i++)
             {
@@ -122,7 +148,7 @@ namespace modbus_rtu_spy
                 {
                     if (farmelist[i][0] == farmelist[i + 1][0] && farmelist[i][1] == farmelist[i + 1][1] && farmelist[i].Length == 8)
                     {
-                        LogCom += LogFrame(farmelist[i], "master=>", numberframe);
+                        LogFrame(farmelist[i], "master=>", numberframe);
                         continue;
                     }
                 }
@@ -130,44 +156,51 @@ namespace modbus_rtu_spy
                 {
                     if (farmelist[i][0] == farmelist[i - 1][0] && farmelist[i][1] == farmelist[i - 1][1] && farmelist[i].Length != 8 && (farmelist[i][1] == 0x03 || farmelist[i][1] == 0x04))
                     {
-                        if (farmelist[i][2] == (((ushort)((ushort)farmelist[i - 1][4] << 8 | farmelist[i - 1][5]))*2))
+                        if (farmelist[i][2] == (((ushort)((ushort)farmelist[i - 1][4] << 8 | farmelist[i - 1][5])) * 2))
                         {
-                            LogCom += LogFrame(farmelist[i], "<= slave", numberframe);
+                            LogFrame(farmelist[i], "<= slave", numberframe);
                             continue;
                         }
                     }
                     if (Enumerable.SequenceEqual(farmelist[i], farmelist[i - 1]) && (farmelist[i][1] == 0x05 || farmelist[i][1] == 0x06))
                     {
-                        LogCom += LogFrame(farmelist[i], "<= slave", numberframe);
+                        LogFrame(farmelist[i], "<= slave", numberframe);
                         continue;
                     }
                 }
-                LogCom += LogFrame(farmelist[i], "??", numberframe);
+                LogFrame(farmelist[i], "??", numberframe);
             }
 
-            LogCom += "[end capture] " + DataStr + "[" + countbyteidx + "] bytes ----------------------------";
-            LogCom += Environment.NewLine;
+            ToLog("[end capture] " + DataStr + "[" + countbyteidx + "] bytes ----------------------------","black");
+            ToLog(Environment.NewLine, "black");
 
             Dispatcher.Invoke(new Action(() =>
                 {
                     rtextboxRaw.AppendText(RawCom);
-                    rtextbox.AppendText(LogCom);
-                    rtextbox.ScrollToEnd();
                     rtextboxRaw.ScrollToEnd();
+                    rtextbox.ScrollToEnd();
                 }
             ));
         }
 
-        private string LogFrame(byte[] frame, string direction, int _numberframe)
+        private void LogFrame(byte[] frame, string direction, int _numberframe)
         {
-            string retstring = "";
-            retstring += string.Format("{0:d4}", _numberframe) + " : " + direction + " ";
-            foreach (var strhex in frame)
+            string retstring = string.Format("{0:d4}", _numberframe) + " : " + direction + " ";
+            if (direction.Contains(">")) { ToLog(retstring, "blue"); } else { ToLog(retstring, "green"); }
+            for (int i = 0; i < frame.Length; i++)
             {
-                retstring += string.Format("{0:X2}", strhex) + " ";
+                ToLog(string.Format("{0:X2}", frame[i]) + " ", "Navy");
             }
-            retstring += Environment.NewLine;
-            return retstring;
+            ToLog(Environment.NewLine , "black");
+        }
+
+        private void ToLog(string text, string color)
+        {
+            Dispatcher.Invoke(new Action(() =>
+            {
+                rtextbox.AppendText(text, color);
+            }
+            ));
         }
 
         private void OpenComPort(object sender, RoutedEventArgs e)
@@ -281,7 +314,7 @@ namespace modbus_rtu_spy
             rtextboxRaw.Document.Blocks.Clear();
         }
 
-        private void Capptextb_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void Capptextb_TextChanged(object sender, TextChangedEventArgs e)
         {
            if (ushort.TryParse(Capptextb.Text, out ushort num))
             {

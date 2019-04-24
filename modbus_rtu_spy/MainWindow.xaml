@@ -35,33 +35,28 @@
                 <TextBox Name ="Capptextb" HorizontalAlignment="Left" Height="23" Margin="120,200,0,0" VerticalAlignment="Top" Width="130" FontFamily="Consolas" VerticalContentAlignment="Center" Text="3000" TextChanged="Capptextb_TextChanged"/>
             </Grid>
         </GroupBox>
-        <Grid VerticalAlignment="Top" Margin="269,10,0,0" HorizontalAlignment="Left" Grid.Row="1" Grid.Column="2" Grid.RowSpan="1" Grid.ColumnSpan="2">
+        <Grid VerticalAlignment="Top" Margin="269,10,0,0" HorizontalAlignment="Left" Grid.RowSpan="1" Width="Auto">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Content="Parse" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-            <RichTextBox Grid.Column="0"  Name="rtextbox" FontFamily="Consolas" Width="Auto" VerticalScrollBarVisibility="Auto" Margin="0,26,0,0">
+            <RichTextBox Grid.Column="0"  Name="rtextbox" FontFamily="Consolas" Width="Auto" VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" UseLayoutRounding="True" Margin="0,23,0,0">
                 <RichTextBox.Resources>
                     <Style TargetType="{x:Type Paragraph}">
                         <Setter Property="Margin" Value="0" />
                     </Style>
                 </RichTextBox.Resources>
-                <FlowDocument>
-                    <Paragraph>
-                        <Run Text=""/>
-                    </Paragraph>
-                </FlowDocument>
             </RichTextBox>
             <GridSplitter Grid.Column="1" ShowsPreview="False" Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
             <Label Grid.Column="2" Content="Raw" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-            <RichTextBox Grid.Column="2" Name="rtextboxRaw" FontFamily="Consolas" Width="Auto"  VerticalScrollBarVisibility="Auto" Margin="0,26,0, 0">
-                <FlowDocument>
-                    <Paragraph>
-                        <Run Text=""/>
-                    </Paragraph>
-                </FlowDocument>
+            <RichTextBox Grid.Column="2" Name="rtextboxRaw" FontFamily="Consolas" Width="Auto" VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" UseLayoutRounding="True" Margin="0,23,0,0">
+                <RichTextBox.Resources>
+                    <Style TargetType="{x:Type Paragraph}">
+                        <Setter Property="Margin" Value="0" />
+                    </Style>
+                </RichTextBox.Resources>
             </RichTextBox>
         </Grid>
     </Grid>
