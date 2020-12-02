@@ -146,7 +146,7 @@ namespace modbus_rtu_spy
                 numberframe++;
                 if ((i + 1) < farmelist.Count)
                 {
-                    if (farmelist[i][0] == farmelist[i + 1][0] && farmelist[i][1] == farmelist[i + 1][1] && farmelist[i].Length == 8)
+                    if (farmelist[i][0] == farmelist[i + 1][0] && farmelist[i][1] == farmelist[i + 1][1] && farmelist[i].Length >= 8)
                     {
                         LogFrame(farmelist[i], "master=>", numberframe);
                         continue;
@@ -162,13 +162,18 @@ namespace modbus_rtu_spy
                             continue;
                         }
                     }
+                    if (farmelist[i][0] == farmelist[i - 1][0] && farmelist[i][1] == farmelist[i - 1][1] && farmelist[i].Length == 8 && (farmelist[i][1] == 0x10) && (farmelist[i][5] == farmelist[i - 1][5]))
+                    {
+                        LogFrame(farmelist[i], "<= slave", numberframe);
+                        continue;
+                    }
                     if (Enumerable.SequenceEqual(farmelist[i], farmelist[i - 1]) && (farmelist[i][1] == 0x05 || farmelist[i][1] == 0x06))
                     {
                         LogFrame(farmelist[i], "<= slave", numberframe);
                         continue;
                     }
                 }
-                LogFrame(farmelist[i], "??", numberframe);
+                LogFrame(farmelist[i], "no answer", numberframe);
             }
 
             ToLog("[end capture] " + DataStr + "[" + countbyteidx + "] bytes ----------------------------","black");
