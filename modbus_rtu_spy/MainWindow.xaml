@@ -42,22 +42,12 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Content="Parse" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-            <RichTextBox Grid.Column="0"  Name="rtextbox" FontFamily="Consolas" Width="Auto" VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" UseLayoutRounding="True" Margin="0,23,0,0">
-                <RichTextBox.Resources>
-                    <Style TargetType="{x:Type Paragraph}">
-                        <Setter Property="Margin" Value="0" />
-                    </Style>
-                </RichTextBox.Resources>
-            </RichTextBox>
+            <TextBox Text="============================================================================================================================"  Grid.Column="0"  Name="textbox" FontFamily="Consolas" Width="Auto" VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" UseLayoutRounding="True" TextWrapping="Wrap" Margin="0,23,0,0">
+            </TextBox>
             <GridSplitter Grid.Column="1" ShowsPreview="False" Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
             <Label Grid.Column="2" Content="Raw" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-            <RichTextBox Grid.Column="2" Name="rtextboxRaw" FontFamily="Consolas" Width="Auto" VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" UseLayoutRounding="True" Margin="0,23,0,0">
-                <RichTextBox.Resources>
-                    <Style TargetType="{x:Type Paragraph}">
-                        <Setter Property="Margin" Value="0" />
-                    </Style>
-                </RichTextBox.Resources>
-            </RichTextBox>
+            <TextBox Text="============================================================================================================================" Grid.Column="2" Name="textboxRaw" FontFamily="Consolas" Width="Auto" VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" UseLayoutRounding="True" TextWrapping="Wrap" Margin="0,23,0,0">
+            </TextBox>
         </Grid>
     </Grid>
 </Window>

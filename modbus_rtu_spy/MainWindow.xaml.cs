@@ -3,41 +3,25 @@ using System.Linq;
 using System.IO.Ports;
 using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Media;
-using System.Windows.Documents;
 using System.Windows.Controls;
 
 namespace modbus_rtu_spy
 {
-    public static class RichTextBoxExt
-    {
-        public static void AppendText(this RichTextBox rtextbox, string text, string color)
-        {
-            BrushConverter bc = new BrushConverter();
-            TextRange tr = new TextRange(rtextbox.Document.ContentEnd, rtextbox.Document.ContentEnd)
-            {
-                Text = text
-            };
-
-            try
-            {
-                tr.ApplyPropertyValue(TextElement.ForegroundProperty, bc.ConvertFromString(color));
-            }
-            catch (FormatException) { }
-        }
-    }
-
     public partial class MainWindow : Window, IDisposable
     {
         public SerialPort com_spy;
+        public string buff_Log;
         public string LogCom;
         public string RawCom;
         public System.Threading.Timer timer;
+        public string new_line;
 
         public MainWindow()
         {
             InitializeComponent();
             SerialCom sp = new SerialCom();
+            new_line = Environment.NewLine;
+
             cbx_Port.ItemsSource = sp.GetSerialPorts();
             cbx_Parity.ItemsSource = sp.GetParity();
             cbx_StopBits.ItemsSource = sp.GetStopBits();
@@ -48,18 +32,15 @@ namespace modbus_rtu_spy
 
         private void OnTimedEvent(object state)
         {
-            if (!com_spy.IsOpen) return;
-            if (com_spy.BytesToRead == 0) return;
+            if (!com_spy.IsOpen) { return; }
+            if (com_spy.BytesToRead == 0) { return; }
 
             int datareceive = 0;
-            //Queue<byte> recievedData = new Queue<byte>();
             byte[] dataLog;
 
             try
             {
                 datareceive = com_spy.Read(dataLog = new byte[com_spy.BytesToRead], 0, dataLog.Length);
-                //dataLog.ToList().ForEach(b => recievedData.Enqueue(b));
-                //var packet = Enumerable.Range(0, 50).Select(i => recievedData.Dequeue());
             }
             catch { return; }
 
@@ -75,24 +56,24 @@ namespace modbus_rtu_spy
             {
                 for (k = l; k < (datareceive - 4); k++)
                 {
-                    if (((dataLog[l] > 0) && (dataLog[l] < 249)) &&
-                        (dataLog[(l + 1)] == 0x01 ||
-                         dataLog[(l + 1)] == 0x02 ||
-                         dataLog[(l + 1)] == 0x03 ||
-                         dataLog[(l + 1)] == 0x04 ||
-                         dataLog[(l + 1)] == 0x05 ||
-                         dataLog[(l + 1)] == 0x06 ||
-                         dataLog[(l + 1)] == 0x0F ||
-                         dataLog[(l + 1)] == 0x10 ||
-                         dataLog[(l + 1)] == 0x81 ||
-                         dataLog[(l + 1)] == 0x82 ||
-                         dataLog[(l + 1)] == 0x83 ||
-                         dataLog[(l + 1)] == 0x84 ||
-                         dataLog[(l + 1)] == 0x85 ||
-                         dataLog[(l + 1)] == 0x8F ||
-                         dataLog[(l + 1)] == 0x90))
+                    if ((dataLog[l] > 0) && (dataLog[l] < 249) &&
+                        (dataLog[l + 1] == 0x01 ||
+                         dataLog[l + 1] == 0x02 ||
+                         dataLog[l + 1] == 0x03 ||
+                         dataLog[l + 1] == 0x04 ||
+                         dataLog[l + 1] == 0x05 ||
+                         dataLog[l + 1] == 0x06 ||
+                         dataLog[l + 1] == 0x0F ||
+                         dataLog[l + 1] == 0x10 ||
+                         dataLog[l + 1] == 0x81 ||
+                         dataLog[l + 1] == 0x82 ||
+                         dataLog[l + 1] == 0x83 ||
+                         dataLog[l + 1] == 0x84 ||
+                         dataLog[l + 1] == 0x85 ||
+                         dataLog[l + 1] == 0x8F ||
+                         dataLog[l + 1] == 0x90))
                     {
-                        int LenghtFrame = (k + 3 - l);
+                        int LenghtFrame = k + 3 - l;
                         if (LenghtFrame > 256) { break; }
                         byte[] CalcCRC = new byte[2];
 
@@ -100,8 +81,8 @@ namespace modbus_rtu_spy
 
                         if (CalcCRC[0] == dataLog[k + 3] && CalcCRC[1] == dataLog[k + 4])
                         {
-                            byte[] temp_frame = new byte[((k + 5) - l)];
-                            Array.Copy(dataLog, l, temp_frame, 0, ((k + 5) - l));
+                            byte[] temp_frame = new byte[(k + 5 - l)];
+                            Array.Copy(dataLog, l, temp_frame, 0, k + 5 - l);
                             farmelist.Add(temp_frame);
                             l = k + 4;
                             break;
@@ -114,33 +95,34 @@ namespace modbus_rtu_spy
                 }
             }
 
-            RawCom += Environment.NewLine;
+            RawCom += new_line;
             RawCom += "[start capture]" + "----------------------------";
-            RawCom += Environment.NewLine;
+            RawCom += new_line;
 
-            foreach (var hexstr in dataLog)
+            foreach (byte hexstr in dataLog)
             {
                 RawCom += string.Format("{0:X2}", hexstr) + " ";
             }
 
-            RawCom += Environment.NewLine;
+            RawCom += new_line;
             RawCom += "[end capture] " + DataStr + "[" + datareceive + "] bytes ----------------------------";
-            RawCom += Environment.NewLine;
+            RawCom += new_line;
 
             int countbyteidx = 0;
-            foreach (var countframe in farmelist)
+            foreach (byte[] countframe in farmelist)
             {
-                foreach (var countbyte in countframe)
+                foreach (byte countbyte in countframe)
                 {
                     countbyteidx++;
                 }
             }
 
+            string _ToLog = "";
+            _ToLog += new_line;
+            _ToLog += "[start capture]===================================================================================================";
+            _ToLog += new_line;
 
-            ToLog(Environment.NewLine, "black");
-            ToLog("[start capture]" + "----------------------------", "black");
-            ToLog(Environment.NewLine, "black");
-
+            buff_Log = "";
             for (int i = 0; i < farmelist.Count; i++)
             {
                 numberframe++;
@@ -156,7 +138,7 @@ namespace modbus_rtu_spy
                 {
                     if (farmelist[i][0] == farmelist[i - 1][0] && farmelist[i][1] == farmelist[i - 1][1] && farmelist[i].Length != 8 && (farmelist[i][1] == 0x03 || farmelist[i][1] == 0x04))
                     {
-                        if (farmelist[i][2] == (((ushort)((ushort)farmelist[i - 1][4] << 8 | farmelist[i - 1][5])) * 2))
+                        if (farmelist[i][2] == (((ushort)((ushort)(farmelist[i - 1][4] << 8) | farmelist[i - 1][5])) * 2))
                         {
                             LogFrame(farmelist[i], "<= slave", numberframe);
                             continue;
@@ -175,35 +157,155 @@ namespace modbus_rtu_spy
                 }
                 LogFrame(farmelist[i], "no answer", numberframe);
             }
-
-            ToLog("[end capture] " + DataStr + "[" + countbyteidx + "] bytes ----------------------------","black");
-            ToLog(Environment.NewLine, "black");
+            _ToLog += buff_Log;
+            _ToLog += "[end capture]=====================================================================================================";
+            _ToLog += new_line;
+            _ToLog += DataStr + "[" + countbyteidx + "] bytes";
+            _ToLog += new_line;
+            ToLog(_ToLog);
 
             Dispatcher.Invoke(new Action(() =>
                 {
-                    rtextboxRaw.AppendText(RawCom);
-                    rtextboxRaw.ScrollToEnd();
-                    rtextbox.ScrollToEnd();
+                    textboxRaw.AppendText(RawCom);
+                    textboxRaw.ScrollToEnd();
                 }
             ));
         }
 
         private void LogFrame(byte[] frame, string direction, int _numberframe)
         {
+            int k = 0;
+            int j = 0;
+            buff_Log += new_line;
             string retstring = string.Format("{0:d4}", _numberframe) + " : " + direction + " ";
-            if (direction.Contains(">")) { ToLog(retstring, "blue"); } else { ToLog(retstring, "green"); }
-            for (int i = 0; i < frame.Length; i++)
+            buff_Log += retstring;
+            if (direction.Contains(">"))//master
             {
-                ToLog(string.Format("{0:X2}", frame[i]) + " ", "Navy");
+                buff_Log += " [DEV] : " + string.Format("{0:X2}", frame[0]);
+                buff_Log += " [FUN] : " + string.Format("{0:X2}", frame[1]);
+                buff_Log += new_line;
+                buff_Log += "                 [REQ] : ";
+                for (int i = 2; i < frame.Length - 2; i++)
+                {
+                    buff_Log += string.Format("{0:X2}", frame[i]) + " ";
+                }
+                buff_Log += new_line;
+                buff_Log += "                 [CRC] : ";
+                for (int i = frame.Length - 2; i < frame.Length; i++)
+                {
+                    buff_Log += string.Format("{0:X2}", frame[i]) + " ";
+                }
             }
-            ToLog(Environment.NewLine , "black");
+            else if (direction.Contains("<"))//slave
+            {
+                if (frame[1] == 0x03 | frame[1] == 0x04)
+                {
+                    buff_Log += " [DEV] : " + string.Format("{0:X2}", frame[0]);
+                    buff_Log += " [FUN] : " + string.Format("{0:X2}", frame[1]);
+                    buff_Log += " [CBD] (HEX): " + string.Format("{0:X2}", frame[2]);
+                    buff_Log += " (DEC) : " + string.Format("{0:d3}", frame[2]);
+                    buff_Log += " (REG) : " + string.Format("{0:d3}", frame[2] / 2);
+                    buff_Log += new_line;
+                    buff_Log += "                 [ANS] : ";
+                    buff_Log += new_line;
+
+                    for (int i = 3; i < frame.Length - 2; i++)
+                    {
+                        if (k == 0)
+                        {
+                            buff_Log += "                    " + string.Format("+{0:d4}", j) + ":(HEX)[" + string.Format("{0:X2}", frame[i]) + " ";
+                            k = 1;
+                        }
+                        else
+                        {
+                            byte[] customviewValue = new byte[2];
+                            ushort vvcUInt16;
+                            short vvc_Int16;
+                            customviewValue[0] = frame[i];
+                            customviewValue[1] = frame[i - 1];
+                            try { vvcUInt16 = BitConverter.ToUInt16(customviewValue, 0); } catch { vvcUInt16 = 0; }
+                            try { vvc_Int16 = BitConverter.ToInt16(customviewValue, 0); } catch { vvc_Int16 = 0; }
+                            buff_Log += string.Format("{0:X2}", frame[i]);
+                            buff_Log += "] ";
+                            buff_Log += "(UInt16) : " + string.Format("{0:D5}", vvcUInt16);
+                            buff_Log += " (Int16) : " + string.Format("{0:D5}", vvc_Int16);
+                            buff_Log += new_line;
+                            k = 0;
+                            j++;
+                        }
+                    }
+
+                    buff_Log += new_line;
+                    buff_Log += "                 [CRC] : ";
+                    for (int i = frame.Length - 2; i < frame.Length; i++)
+                    {
+                        buff_Log += string.Format("{0:X2}", frame[i]) + " ";
+                    }
+                }
+                else if (frame[1] == 0x01 | frame[1] == 0x02)
+                {
+                    buff_Log += " [DEV] : " + string.Format("{0:X2}", frame[0]);
+                    buff_Log += " [FUN] : " + string.Format("{0:X2}", frame[1]);
+                    buff_Log += " [CBD] (HEX): " + string.Format("{0:X2}", frame[2]);
+                    buff_Log += " (DEC) : " + string.Format("{0:d3}", frame[2]);
+                    buff_Log += new_line;
+                    buff_Log += "                 [ANS] : ";
+                    buff_Log += new_line;
+
+                    for (int i = 3; i < frame.Length - 2; i++)
+                    {
+                        string bits_str;
+                        try { bits_str = Convert.ToString(frame[i], 2).PadLeft(8, paddingChar: '0'); } catch { bits_str = "_"; }
+                        buff_Log += "["+ string.Format("{0:X2}", frame[i]) + "] [" + bits_str + "]";
+                        buff_Log += new_line;
+                    }
+
+                    buff_Log += new_line;
+                    buff_Log += "                 [CRC] : ";
+
+                    for (int i = frame.Length - 2; i < frame.Length; i++)
+                    {
+                        buff_Log += string.Format("{0:X2}", frame[i]) + " ";
+                    }
+                }
+                else
+                {
+                    buff_Log += " [DEV] : " + string.Format("{0:X2}", frame[0]);
+                    buff_Log += " [FUN] : " + string.Format("{0:X2}", frame[1]);
+                    buff_Log += new_line;
+                    buff_Log += " [ANS] : ";
+                    buff_Log += new_line;
+
+                    for (int i = 2; i < frame.Length - 2; i++)
+                    {
+
+                       buff_Log += string.Format("{0:X2}", frame[i]) + " ";
+                    }
+
+                    buff_Log += new_line;
+                    buff_Log += "                 [CRC] : ";
+                    for (int i = frame.Length - 2; i < frame.Length; i++)
+                    {
+                        buff_Log += string.Format("{0:X2}", frame[i]) + " ";
+                    }
+                }
+            }
+            else//no answer
+            {
+                for (int i = 0; i < frame.Length; i++)
+                {
+                    buff_Log += string.Format("{0:X2}", frame[i]) + " ";
+                }
+            }
+            buff_Log += new_line;
         }
 
-        private void ToLog(string text, string color)
+        private void ToLog(string text)
         {
             Dispatcher.Invoke(new Action(() =>
             {
-                rtextbox.AppendText(text, color);
+                textbox.AppendText(text);
+                textbox.ScrollToEnd();
             }
             ));
         }
@@ -315,15 +417,17 @@ namespace modbus_rtu_spy
 
         private void Clear(object sender, RoutedEventArgs e)
         {
-            rtextbox.Document.Blocks.Clear();
-            rtextboxRaw.Document.Blocks.Clear();
+            textbox.Clear();
+            textboxRaw.Clear();
+            textbox.AppendText(   "Clear=======================================================================================================================");
+            textboxRaw.AppendText("Clear=======================================================================================================================");
         }
 
         private void Capptextb_TextChanged(object sender, TextChangedEventArgs e)
         {
            if (ushort.TryParse(Capptextb.Text, out ushort num))
             {
-                if (num > 10000) { num = 10000; Capptextb.Text = "10000"; }
+                if (num > 10000) {Capptextb.Text = "10000"; }
                 else { Capptextb.Text = Capptextb.Text; }
             }
             else
@@ -418,7 +522,6 @@ namespace modbus_rtu_spy
                 timer.Dispose();
                 com_spy.Dispose();
             }
-            disposing = true;
         }
     }
 }
