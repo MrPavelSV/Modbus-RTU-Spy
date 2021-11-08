@@ -198,7 +198,7 @@ namespace modbus_rtu_spy
             }
             else if (direction.Contains("<"))//slave
             {
-                if (frame[1] == 0x03 | frame[1] == 0x04)
+                if (frame[1] == 0x03 || frame[1] == 0x04)
                 {
                     buff_Log += " [DEV] : " + string.Format("{0:X2}", frame[0]);
                     buff_Log += " [FUN] : " + string.Format("{0:X2}", frame[1]);
@@ -242,7 +242,7 @@ namespace modbus_rtu_spy
                         buff_Log += string.Format("{0:X2}", frame[i]) + " ";
                     }
                 }
-                else if (frame[1] == 0x01 | frame[1] == 0x02)
+                else if (frame[1] == 0x01 || frame[1] == 0x02)
                 {
                     buff_Log += " [DEV] : " + string.Format("{0:X2}", frame[0]);
                     buff_Log += " [FUN] : " + string.Format("{0:X2}", frame[1]);
