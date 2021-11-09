@@ -4,9 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="ModBus RTU Spy" Height="372" Width="800" Icon="app.ico">
-    <Grid>
-        <GroupBox VerticalAlignment="Top" HorizontalAlignment="Left" Height="336">
+        Title="ModBus RTU Spy" Height="600" Width="800" Icon="app.ico">
+    <Grid Margin="0,0,0,0">
+        <GroupBox VerticalAlignment="Top" HorizontalAlignment="Left" Height="330">
             <GroupBox.Header>
                 <Label>Port settings</Label>
             </GroupBox.Header>
@@ -33,6 +33,31 @@
                 <Button Name="Clear_text" Content="Clear" HorizontalAlignment="Left" Margin="100,270,0,0" VerticalAlignment="Top" Width="74" Click="Clear"/>
                 <Label Content="Capture Period (ms):" HorizontalAlignment="Left" Margin="0,200,0,0" VerticalAlignment="Top"/>
                 <TextBox Name ="Capptextb" HorizontalAlignment="Left" Height="23" Margin="120,200,0,0" VerticalAlignment="Top" Width="130" FontFamily="Consolas" VerticalContentAlignment="Center" Text="3000" TextChanged="Capptextb_TextChanged"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox VerticalAlignment="Top" HorizontalAlignment="Left" Height="220" Margin="0,335,0,0" Width="264">
+            <GroupBox.Header>
+                <Label>View</Label>
+            </GroupBox.Header>
+            <Grid>
+                <CheckBox Name="chbUInt16" Content="UInt16" HorizontalAlignment="Left" Margin="10,16,0,0" VerticalAlignment="Top" Checked="chbUInt16_Checked" Unchecked="chbUInt16_Unchecked">
+                </CheckBox>
+                <Label Content="ByteOrder16:" HorizontalAlignment="Left" Margin="80,10,0,0" VerticalAlignment="Top"/>
+                <ComboBox Name="Cbx_BO16" HorizontalAlignment="Left" Margin="164,14,0,0" VerticalAlignment="Top" Width="58" IsReadOnly="True" FontFamily="Consolas" SelectedIndex="0" SelectionChanged="Cbx_BO16_SelectionChanged">
+                </ComboBox>
+                <CheckBox Name="chb_Int16" Content="Int16" HorizontalAlignment="Left" Margin="10,46,0,0" VerticalAlignment="Top" Checked="chb_Int16_Checked" Unchecked="chb_Int16_Unchecked">
+                </CheckBox>
+                <CheckBox Name="chbUInt32" Content="UInt32" HorizontalAlignment="Left" Margin="10,76,0,0" VerticalAlignment="Top" Checked="chbUInt32_Checked" Unchecked="chbUInt32_Unchecked">
+                </CheckBox>
+                <Label Content="ByteOrder32:" HorizontalAlignment="Left" Margin="80,70,0,0" VerticalAlignment="Top"/>
+                <ComboBox Name="Cbx_BO32" HorizontalAlignment="Left" Margin="164,74,0,0" VerticalAlignment="Top" Width="58" IsReadOnly="True" FontFamily="Consolas" SelectedIndex="0" SelectionChanged="Cbx_BO32_SelectionChanged">
+                </ComboBox>
+                <CheckBox Name="chb_Int32" Content="Int32" HorizontalAlignment="Left" Margin="10,106,0,0" VerticalAlignment="Top" Checked="chb_Int32_Checked" Unchecked="chb_Int32_Unchecked">
+                </CheckBox>
+                <CheckBox Name="chb_Float" Content="Float" HorizontalAlignment="Left" Margin="10,136,0,0" VerticalAlignment="Top" Checked="chb_Float_Checked" Unchecked="chb_Float_Unchecked">
+                </CheckBox>
+                <CheckBox Name="chb_Bin" Content="Bin" HorizontalAlignment="Left" Margin="10,166,0,0" VerticalAlignment="Top" Checked="chb_Bin_Checked" Unchecked="chb_Bin_Unchecked">
+                </CheckBox>
             </Grid>
         </GroupBox>
         <Grid VerticalAlignment="Top" Margin="269,10,0,0" HorizontalAlignment="Left" Grid.RowSpan="1" Width="Auto">

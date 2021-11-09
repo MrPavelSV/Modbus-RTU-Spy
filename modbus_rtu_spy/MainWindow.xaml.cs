@@ -11,8 +11,19 @@ namespace modbus_rtu_spy
     {
         public SerialPort com_spy;
         public string buff_Log;
+        public string orderbyte16 = "AB";
+        public string orderbyte32 = "ABCD";
         public string LogCom;
         public string RawCom;
+        public bool chek_Bin = false;
+        public bool chek_UInt16 = false;
+        public bool chek_Int16 = false;
+        public bool chek_UInt32 = false;
+        public bool chek_Int32 = false;
+        public bool chek_Float = false;
+        public string[] orderByteL16 = { "AB", "BA"};
+        public string[] orderByteL32 = { "ABCD", "ABDC", "ACBD", "ACDB", "ADBC", "ADCB", "BACD", "BADC", "BCAD", "BCDA", "BDAC", "BDCA", "CABD", "CADB", "CBAD", "CBDA", "CDAB", "CDBA", "DABC", "DACB", "DBAC", "DBCA", "DCAB", "DCBA" };
+        
         public System.Threading.Timer timer;
         public string new_line;
 
@@ -28,6 +39,8 @@ namespace modbus_rtu_spy
             cbx_Data.ItemsSource = sp.GetDataBits();
             cbx_Speed.ItemsSource = sp.GetBaudRates();
             cbx_Handshake.ItemsSource = sp.GetHandshake();
+            Cbx_BO16.ItemsSource = orderByteL16;
+            Cbx_BO32.ItemsSource = orderByteL32;
         }
 
         private void OnTimedEvent(object state)
@@ -144,6 +157,12 @@ namespace modbus_rtu_spy
                             continue;
                         }
                     }
+                    if (farmelist[i][0] == farmelist[i - 1][0] && farmelist[i][1] == farmelist[i - 1][1] && farmelist[i].Length != 8 && (farmelist[i][1] == 0x01 || farmelist[i][1] == 0x02))
+                    {
+                        LogFrame(farmelist[i], "<= slave", numberframe);
+                        continue;
+                    }
+
                     if (farmelist[i][0] == farmelist[i - 1][0] && farmelist[i][1] == farmelist[i - 1][1] && farmelist[i].Length == 8 && (farmelist[i][1] == 0x10) && (farmelist[i][5] == farmelist[i - 1][5]))
                     {
                         LogFrame(farmelist[i], "<= slave", numberframe);
@@ -158,6 +177,8 @@ namespace modbus_rtu_spy
                 LogFrame(farmelist[i], "no answer", numberframe);
             }
             _ToLog += buff_Log;
+            _ToLog += new_line;
+            _ToLog += "ByteOrder16 = " + orderbyte16 + " ByteOrder32 = " + orderbyte32;
             _ToLog += "[end capture]=====================================================================================================";
             _ToLog += new_line;
             _ToLog += DataStr + "[" + countbyteidx + "] bytes";
@@ -179,6 +200,8 @@ namespace modbus_rtu_spy
             buff_Log += new_line;
             string retstring = string.Format("{0:d4}", _numberframe) + " : " + direction + " ";
             buff_Log += retstring;
+            Dictionary<byte, byte> hexABCD = new Dictionary<byte, byte>();
+
             if (direction.Contains(">"))//master
             {
                 buff_Log += " [DEV] : " + string.Format("{0:X2}", frame[0]);
@@ -218,21 +241,78 @@ namespace modbus_rtu_spy
                         }
                         else
                         {
-                            byte[] customviewValue = new byte[2];
-                            ushort vvcUInt16;
-                            short vvc_Int16;
-                            customviewValue[0] = frame[i];
-                            customviewValue[1] = frame[i - 1];
-                            try { vvcUInt16 = BitConverter.ToUInt16(customviewValue, 0); } catch { vvcUInt16 = 0; }
-                            try { vvc_Int16 = BitConverter.ToInt16(customviewValue, 0); } catch { vvc_Int16 = 0; }
                             buff_Log += string.Format("{0:X2}", frame[i]);
                             buff_Log += "] ";
-                            buff_Log += "(UInt16) : " + string.Format("{0:D5}", vvcUInt16);
-                            buff_Log += " (Int16) : " + string.Format("{0:D5}", vvc_Int16);
-                            buff_Log += new_line;
+                            if (chek_Bin== true || chek_UInt16 == true || chek_Int16 == true)
+                            {
+                                //orderbyte16
+                                char[] orderbyte = new char[2];
+                                if (orderbyte16 == "") { orderbyte16 = "AB"; }
+                                orderbyte = orderbyte16.ToCharArray();
+                                byte[] customviewValue16 = new byte[2];
+                                customviewValue16[orderbyte[0] - 65] = frame[i];
+                                customviewValue16[orderbyte[1] - 65] = frame[i - 1];
+
+                                if (chek_Bin == true)
+                                {
+                                    ushort vvcUInt16;
+                                    try { vvcUInt16 = BitConverter.ToUInt16(customviewValue16, 0); } catch { vvcUInt16 = 0; }
+                                    string bits_str;
+                                    try { bits_str = Convert.ToString(vvcUInt16, 2).PadLeft(16, paddingChar: '0'); } catch { bits_str = "_"; }
+                                    buff_Log += " BIN : [" + bits_str + "]";
+                                }
+                                if (chek_UInt16 == true)
+                                {
+                                    ushort vvcUInt16;
+                                    try { vvcUInt16 = BitConverter.ToUInt16(customviewValue16, 0); } catch { vvcUInt16 = 0; }
+                                    buff_Log += "(UInt16) : " + string.Format("{0:D5}", vvcUInt16);
+                                }
+                                if (chek_Int16 == true)
+                                {
+                                    short vvc_Int16;
+                                    try { vvc_Int16 = BitConverter.ToInt16(customviewValue16, 0); } catch { vvc_Int16 = 0; }
+                                    buff_Log += " (Int16) : " + string.Format("{0:D5}", vvc_Int16);
+                                }
+                            }
+
+                            if ((j > 0) && ((j + 1) % 2 == 0) && ((chek_UInt32 == true) || (chek_Int32 == true) || (chek_Float == true)))
+                            {
+                                //orderbyte32
+                                char[] orderbyte = new char[4];
+                                if (orderbyte32 == "") { orderbyte32 = "ABCD"; }
+                                orderbyte = orderbyte32.ToCharArray();
+                                byte[] customviewValue32 = new byte[4];                              
+                                customviewValue32[orderbyte[0] - 65] = frame[i];//A
+                                customviewValue32[orderbyte[1] - 65] = frame[i - 1];//B
+                                customviewValue32[orderbyte[2] - 65] = frame[i - 2];    //C
+                                customviewValue32[orderbyte[3] - 65] = frame[i - 3];//D
+
+                                if (chek_UInt32 == true)
+                                {
+                                    UInt32 vvcUInt32;
+                                    try { vvcUInt32 = BitConverter.ToUInt32(customviewValue32, 0); } catch { vvcUInt32 = 0; }
+                                    buff_Log += " (UInt32) : " + string.Format("{0:D5}", vvcUInt32);
+                                }
+                                if (chek_Int32 == true)
+                                {
+                                    Int32 vvcInt32;
+                                    try { vvcInt32 = BitConverter.ToInt32(customviewValue32, 0); } catch { vvcInt32 = 0; }
+                                    buff_Log += " (Int32) : " + string.Format("{0:D5}", vvcInt32);
+                                }
+                                if (chek_Float == true)
+                                {
+                                    float vvcFloat;
+                                    try { vvcFloat = BitConverter.ToSingle(customviewValue32, 0); } catch { vvcFloat = 0.0F; }
+                                    buff_Log += " (Float) : " + vvcFloat.ToString("0.0000");
+                                }
+                            }
+
                             k = 0;
                             j++;
+                            buff_Log += new_line;
                         }
+
+
                     }
 
                     buff_Log += new_line;
@@ -256,7 +336,7 @@ namespace modbus_rtu_spy
                     {
                         string bits_str;
                         try { bits_str = Convert.ToString(frame[i], 2).PadLeft(8, paddingChar: '0'); } catch { bits_str = "_"; }
-                        buff_Log += "["+ string.Format("{0:X2}", frame[i]) + "] [" + bits_str + "]";
+                        buff_Log += "                 [" + string.Format("{0:X2}", frame[i]) + "] [" + bits_str + "]";
                         buff_Log += new_line;
                     }
 
@@ -522,6 +602,76 @@ namespace modbus_rtu_spy
                 timer.Dispose();
                 com_spy.Dispose();
             }
+        }
+
+        private void chbUInt16_Checked(object sender, RoutedEventArgs e)
+        {
+            chek_UInt16 = true;
+        }
+
+        private void chbUInt16_Unchecked(object sender, RoutedEventArgs e)
+        {
+            chek_UInt16 = false;
+        }
+
+        private void chb_Int16_Checked(object sender, RoutedEventArgs e)
+        {
+            chek_Int16 = true;
+        }
+
+        private void chb_Int16_Unchecked(object sender, RoutedEventArgs e)
+        {
+            chek_Int16 = false;
+        }
+
+        private void chbUInt32_Checked(object sender, RoutedEventArgs e)
+        {
+            chek_UInt32 = true;
+        }
+
+        private void chbUInt32_Unchecked(object sender, RoutedEventArgs e)
+        {
+            chek_UInt32 = false;
+        }
+
+        private void chb_Int32_Checked(object sender, RoutedEventArgs e)
+        {
+            chek_Int32 = true;
+        }
+
+        private void chb_Int32_Unchecked(object sender, RoutedEventArgs e)
+        {
+            chek_Int32 = false;
+        }
+
+        private void chb_Float_Checked(object sender, RoutedEventArgs e)
+        {
+            chek_Float = true;
+        }
+
+        private void chb_Float_Unchecked(object sender, RoutedEventArgs e)
+        {
+            chek_Float = false;
+        }
+
+        private void chb_Bin_Checked(object sender, RoutedEventArgs e)
+        {
+            chek_Bin = true;
+        }
+
+        private void chb_Bin_Unchecked(object sender, RoutedEventArgs e)
+        {
+            chek_Bin = false;
+        }
+
+        private void Cbx_BO16_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            orderbyte16 = Cbx_BO16.SelectedItem.ToString();
+        }
+
+        private void Cbx_BO32_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            orderbyte32 = Cbx_BO32.SelectedItem.ToString();
         }
     }
 }
