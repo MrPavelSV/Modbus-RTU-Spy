@@ -84,7 +84,7 @@ namespace modbus_rtu_spy
         {
         }
 
-        public List <string> GetSerialPorts()
+        public List<string> GetSerialPorts()
         {
             List<string> available_ports = new List<string>();
             List<COMPortInfo> SerialInfo = new List<COMPortInfo>(COMPortInfo.GetCOMPortsInfo());
@@ -114,13 +114,13 @@ namespace modbus_rtu_spy
         public List<string> GetDataBits()
         {
             List<string> DataBits = new List<string>();
-            for (int i = 5; i < 9; i++) { DataBits.Add(i.ToString()); }        
+            for (int i = 5; i < 9; i++) { DataBits.Add(i.ToString()); }
             return DataBits;
         }
 
         public List<string> GetBaudRates()
         {
-            return new List<string> (){"300","600","1200","2400","4800","9600","14400","19200","28800","38400","56000","57600","115200","128000","256000"};
+            return new List<string>() { "300", "600", "1200", "2400", "4800", "9600", "14400", "19200", "28800", "38400", "56000", "57600", "115200", "128000", "256000" };
         }
 
         public List<string> GetHandshake()
