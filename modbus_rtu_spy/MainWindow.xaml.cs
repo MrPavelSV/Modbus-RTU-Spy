@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.IO.Ports;
 using System.Collections.Generic;
@@ -179,6 +179,7 @@ namespace modbus_rtu_spy
             _ToLog += buff_Log;
             _ToLog += new_line;
             _ToLog += "ByteOrder16 = " + orderbyte16 + " ByteOrder32 = " + orderbyte32;
+            _ToLog += new_line;
             _ToLog += "[end capture]=====================================================================================================";
             _ToLog += new_line;
             _ToLog += DataStr + "[" + countbyteidx + "] bytes";
@@ -236,7 +237,7 @@ namespace modbus_rtu_spy
                     {
                         if (k == 0)
                         {
-                            buff_Log += "                    " + string.Format("+{0:d4}", j) + ":(HEX)[" + string.Format("{0:X2}", frame[i]) + " ";
+                            buff_Log += "                 " + string.Format("+{0:d4}", j) + ":(HEX)[" + string.Format("{0:X2}", frame[i]) + " ";
                             k = 1;
                         }
                         else
@@ -245,10 +246,8 @@ namespace modbus_rtu_spy
                             buff_Log += "] ";
                             if (chek_Bin== true || chek_UInt16 == true || chek_Int16 == true)
                             {
-                                //orderbyte16
-                                char[] orderbyte = new char[2];
                                 if (orderbyte16 == "") { orderbyte16 = "AB"; }
-                                orderbyte = orderbyte16.ToCharArray();
+                                char[] orderbyte = orderbyte16.ToCharArray();
                                 byte[] customviewValue16 = new byte[2];
                                 customviewValue16[orderbyte[0] - 65] = frame[i];
                                 customviewValue16[orderbyte[1] - 65] = frame[i - 1];
@@ -278,9 +277,8 @@ namespace modbus_rtu_spy
                             if ((j > 0) && ((j + 1) % 2 == 0) && ((chek_UInt32 == true) || (chek_Int32 == true) || (chek_Float == true)))
                             {
                                 //orderbyte32
-                                char[] orderbyte = new char[4];
                                 if (orderbyte32 == "") { orderbyte32 = "ABCD"; }
-                                orderbyte = orderbyte32.ToCharArray();
+                                char[] orderbyte = orderbyte32.ToCharArray();
                                 byte[] customviewValue32 = new byte[4];                              
                                 customviewValue32[orderbyte[0] - 65] = frame[i];//A
                                 customviewValue32[orderbyte[1] - 65] = frame[i - 1];//B
