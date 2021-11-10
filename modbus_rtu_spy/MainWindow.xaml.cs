@@ -1,7 +1,7 @@
 using System;
-using System.Linq;
-using System.IO.Ports;
 using System.Collections.Generic;
+using System.IO.Ports;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -21,9 +21,9 @@ namespace modbus_rtu_spy
         public bool chek_UInt32 = false;
         public bool chek_Int32 = false;
         public bool chek_Float = false;
-        public string[] orderByteL16 = { "AB", "BA"};
+        public string[] orderByteL16 = { "AB", "BA" };
         public string[] orderByteL32 = { "ABCD", "ABDC", "ACBD", "ACDB", "ADBC", "ADCB", "BACD", "BADC", "BCAD", "BCDA", "BDAC", "BDCA", "CABD", "CADB", "CBAD", "CBDA", "CDAB", "CDBA", "DABC", "DACB", "DBAC", "DBCA", "DCAB", "DCBA" };
-        
+
         public System.Threading.Timer timer;
         public string new_line;
 
@@ -201,7 +201,6 @@ namespace modbus_rtu_spy
             buff_Log += new_line;
             string retstring = string.Format("{0:d4}", _numberframe) + " : " + direction + " ";
             buff_Log += retstring;
-            Dictionary<byte, byte> hexABCD = new Dictionary<byte, byte>();
 
             if (direction.Contains(">"))//master
             {
@@ -244,7 +243,7 @@ namespace modbus_rtu_spy
                         {
                             buff_Log += string.Format("{0:X2}", frame[i]);
                             buff_Log += "] ";
-                            if (chek_Bin== true || chek_UInt16 == true || chek_Int16 == true)
+                            if (chek_Bin == true || chek_UInt16 == true || chek_Int16 == true)
                             {
                                 if (orderbyte16 == "") { orderbyte16 = "AB"; }
                                 char[] orderbyte = orderbyte16.ToCharArray();
@@ -279,7 +278,7 @@ namespace modbus_rtu_spy
                                 //orderbyte32
                                 if (orderbyte32 == "") { orderbyte32 = "ABCD"; }
                                 char[] orderbyte = orderbyte32.ToCharArray();
-                                byte[] customviewValue32 = new byte[4];                              
+                                byte[] customviewValue32 = new byte[4];
                                 customviewValue32[orderbyte[0] - 65] = frame[i];//A
                                 customviewValue32[orderbyte[1] - 65] = frame[i - 1];//B
                                 customviewValue32[orderbyte[2] - 65] = frame[i - 2];    //C
@@ -357,7 +356,7 @@ namespace modbus_rtu_spy
                     for (int i = 2; i < frame.Length - 2; i++)
                     {
 
-                       buff_Log += string.Format("{0:X2}", frame[i]) + " ";
+                        buff_Log += string.Format("{0:X2}", frame[i]) + " ";
                     }
 
                     buff_Log += new_line;
@@ -390,10 +389,10 @@ namespace modbus_rtu_spy
 
         private void OpenComPort(object sender, RoutedEventArgs e)
         {
-            string comname  = cbx_Port.Text;
+            string comname = cbx_Port.Text;
             string baudrate = cbx_Speed.Text;
             string paritycb = cbx_Parity.Text;
-            string stopbcb  = cbx_StopBits.Text;
+            string stopbcb = cbx_StopBits.Text;
             string databits = cbx_Data.Text;
 
             Parity tParity;
@@ -430,7 +429,7 @@ namespace modbus_rtu_spy
 
             if (cbx_Port.Text.Contains("COM"))
             {
-                comname = cbx_Port.Text.Substring(cbx_Port.Text.IndexOf("COM"), cbx_Port.Text.IndexOf(":")-1);
+                comname = cbx_Port.Text.Substring(cbx_Port.Text.IndexOf("COM"), cbx_Port.Text.IndexOf(":") - 1);
             }
             else
             {
@@ -442,21 +441,21 @@ namespace modbus_rtu_spy
 
             if (!com_spy.IsOpen)
             {
-                com_spy.BaudRate       = combd;
-                com_spy.Parity         = tParity;
-                com_spy.DataBits       = idatabits;
-                com_spy.StopBits       = stopBits;
+                com_spy.BaudRate = combd;
+                com_spy.Parity = tParity;
+                com_spy.DataBits = idatabits;
+                com_spy.StopBits = stopBits;
                 com_spy.ReadBufferSize = 8192;
-                Open_port.IsEnabled    = false;
-                cbx_Data.IsEnabled     = false;
-                cbx_Parity.IsEnabled   = false;
-                cbx_Port.IsEnabled     = false;
-                cbx_Speed.IsEnabled    = false;
+                Open_port.IsEnabled = false;
+                cbx_Data.IsEnabled = false;
+                cbx_Parity.IsEnabled = false;
+                cbx_Port.IsEnabled = false;
+                cbx_Speed.IsEnabled = false;
                 cbx_StopBits.IsEnabled = false;
-                Capptextb.IsEnabled    = false;
-                Close_port.IsEnabled   = true;
+                Capptextb.IsEnabled = false;
+                Close_port.IsEnabled = true;
                 com_spy.Open();
-                
+
                 timer = new System.Threading.Timer(OnTimedEvent);
 
                 try
@@ -480,15 +479,15 @@ namespace modbus_rtu_spy
                     timer.Dispose();
                     com_spy.Close();
                     com_spy.Dispose();
-                    Open_port.IsEnabled    = true;
-                    Open_port.IsEnabled    = true;
-                    cbx_Data.IsEnabled     = true;
-                    cbx_Parity.IsEnabled   = true;
-                    cbx_Port.IsEnabled     = true;
-                    cbx_Speed.IsEnabled    = true;
+                    Open_port.IsEnabled = true;
+                    Open_port.IsEnabled = true;
+                    cbx_Data.IsEnabled = true;
+                    cbx_Parity.IsEnabled = true;
+                    cbx_Port.IsEnabled = true;
+                    cbx_Speed.IsEnabled = true;
                     cbx_StopBits.IsEnabled = true;
-                    Capptextb.IsEnabled    = true;
-                    Close_port.IsEnabled   = false;
+                    Capptextb.IsEnabled = true;
+                    Close_port.IsEnabled = false;
                 }
             }
         }
@@ -497,15 +496,15 @@ namespace modbus_rtu_spy
         {
             textbox.Clear();
             textboxRaw.Clear();
-            textbox.AppendText(   "Clear=======================================================================================================================");
+            textbox.AppendText("Clear=======================================================================================================================");
             textboxRaw.AppendText("Clear=======================================================================================================================");
         }
 
         private void Capptextb_TextChanged(object sender, TextChangedEventArgs e)
         {
-           if (ushort.TryParse(Capptextb.Text, out ushort num))
+            if (ushort.TryParse(Capptextb.Text, out ushort num))
             {
-                if (num > 10000) {Capptextb.Text = "10000"; }
+                if (num > 10000) { Capptextb.Text = "10000"; }
                 else { Capptextb.Text = Capptextb.Text; }
             }
             else
