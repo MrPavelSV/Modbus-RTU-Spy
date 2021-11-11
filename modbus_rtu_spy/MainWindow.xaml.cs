@@ -141,10 +141,24 @@ namespace modbus_rtu_spy
                 numberframe++;
                 if ((i + 1) < farmelist.Count)
                 {
-                    if (farmelist[i][0] == farmelist[i + 1][0] && farmelist[i][1] == farmelist[i + 1][1] && farmelist[i].Length >= 8)
+                    if (farmelist[i][0] == farmelist[i + 1][0] && farmelist[i][1] == farmelist[i + 1][1])
                     {
-                        LogFrame(farmelist[i], "master=>", numberframe);
-                        continue;
+                        if (farmelist[i].Length == 8 && 
+                            (farmelist[i][1] == 0x01 || 
+                             farmelist[i][1] == 0x02 || 
+                             farmelist[i][1] == 0x03 || 
+                             farmelist[i][1] == 0x04 || 
+                             farmelist[i][1] == 0x05 || 
+                             farmelist[i][1] == 0x06))
+                        {
+                            LogFrame(farmelist[i], "master=>", numberframe);
+                            continue;
+                        }
+                        if (farmelist[i].Length > 8 && (farmelist[i][1] == 0x0F || farmelist[i][1] == 0x10))
+                        {
+                            LogFrame(farmelist[i], "master=>", numberframe);
+                            continue;
+                        }
                     }
                 }
                 if (i > 0)
@@ -168,7 +182,7 @@ namespace modbus_rtu_spy
                         LogFrame(farmelist[i], "<= slave", numberframe);
                         continue;
                     }
-                    if (Enumerable.SequenceEqual(farmelist[i], farmelist[i - 1]) && (farmelist[i][1] == 0x05 || farmelist[i][1] == 0x06))
+                    if (Enumerable.SequenceEqual(farmelist[i], farmelist[i - 1]) && (farmelist[i][1] == 0x05 || farmelist[i][1] == 0x06) && farmelist[i].Length == 8)
                     {
                         LogFrame(farmelist[i], "<= slave", numberframe);
                         continue;
@@ -207,10 +221,256 @@ namespace modbus_rtu_spy
                 buff_Log += " [DEV] : " + string.Format("{0:X2}", frame[0]);
                 buff_Log += " [FUN] : " + string.Format("{0:X2}", frame[1]);
                 buff_Log += new_line;
-                buff_Log += "                 [REQ] : ";
-                for (int i = 2; i < frame.Length - 2; i++)
+                if (frame[1] == 0x01 || frame[1] == 0x02)
                 {
-                    buff_Log += string.Format("{0:X2}", frame[i]) + " ";
+                    for (int i = 2; i < frame.Length - 2; i++)
+                    {
+                        if (i < 4)
+                        {
+                            if (i == 2)
+                            {
+                                buff_Log += "                 [REQ] : ";
+                                buff_Log += new_line;
+                                buff_Log += "                 START BIN  : ";
+                                buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
+                            }
+                            if (i == 3)
+                            {
+                                buff_Log += string.Format("{0:X2}", frame[i]) + "]";
+                                buff_Log += " (DEC) : " + string.Format("{0:d5}", (ushort)((ushort)(frame[i - 1] << 8) + frame[i]));
+                                buff_Log += new_line;
+                            }
+                        }
+                        if (i > 3)
+                        {
+                            if (i == 4)
+                            {
+                                buff_Log += "                 NUM OF BIN : ";
+                                buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
+                            }
+                            if (i == 5)
+                            {
+                                buff_Log += string.Format("{0:X2}", frame[i]) + "]";
+                                buff_Log += " (DEC) : " + string.Format("{0:d5}", (ushort)((ushort)(frame[i - 1] << 8) + frame[i]));
+                                buff_Log += new_line;
+                            }
+                        }
+                    }
+                }
+                if (frame[1] == 0x03 || frame[1] == 0x04)
+                {
+                    for (int i = 2; i < frame.Length - 2; i++)
+                    {
+                        if (i < 4)
+                        {                            
+                            if (i == 2)
+                            {
+                                buff_Log += "                 [REQ] : ";
+                                buff_Log += new_line;
+                                buff_Log += "                 START REG  : ";
+                                buff_Log += "["+ string.Format("{0:X2}", frame[i]) + " ";
+                            }
+                            if (i == 3)
+                            {
+                                buff_Log += string.Format("{0:X2}", frame[i]) + "]";
+                                buff_Log += " (DEC) : " + string.Format("{0:d5}", (ushort)((ushort)(frame[i-1]<<8) + frame[i]));
+                                buff_Log += new_line;
+                            }
+                        }
+                        if (i > 3)
+                        {      
+                            if (i == 4)
+                            {
+                                buff_Log += "                 NUM OF REG : ";
+                                buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
+                            }
+                            if (i == 5)
+                            {
+                                buff_Log += string.Format("{0:X2}", frame[i]) + "]";
+                                buff_Log += " (DEC) : " + string.Format("{0:d5}", (ushort)((ushort)(frame[i-1] << 8) + frame[i]));
+                                buff_Log += new_line;
+                            }
+                        }
+                    }
+                }
+                if (frame[1] == 0x06)
+                {
+                    for (int i = 2; i < frame.Length - 2; i++)
+                    {
+                        if (i < 4)
+                        {
+                            if (i == 2)
+                            {
+                                buff_Log += "                 [REQ] : ";
+                                buff_Log += new_line;
+                                buff_Log += "                 START REG : ";
+                                buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
+                            }
+                            if (i == 3)
+                            {
+                                buff_Log += string.Format("{0:X2}", frame[i]) + "]";
+                                buff_Log += " (DEC) : " + string.Format("{0:d5}", (ushort)((ushort)(frame[i - 1] << 8) + frame[i]));
+                                buff_Log += new_line;
+                            }
+                        }
+                        if (i > 3)
+                        {
+                            if (i == 4)
+                            {
+                                buff_Log += "                   REG VAL : ";
+                                buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
+                            }
+                            if (i == 5)
+                            {
+                                buff_Log += string.Format("{0:X2}", frame[i]) + "] ";
+                                if (chek_Bin == true || chek_UInt16 == true || chek_Int16 == true)
+                                {
+                                    if (orderbyte16 == "") { orderbyte16 = "AB"; }
+                                    char[] orderbyte = orderbyte16.ToCharArray();
+                                    byte[] customviewValue16 = new byte[2];
+                                    customviewValue16[orderbyte[0] - 65] = frame[i];
+                                    customviewValue16[orderbyte[1] - 65] = frame[i - 1];
+
+                                    if (chek_Bin == true)
+                                    {
+                                        ushort vvcUInt16;
+                                        try { vvcUInt16 = BitConverter.ToUInt16(customviewValue16, 0); } catch { vvcUInt16 = 0; }
+                                        string bits_str;
+                                        try { bits_str = Convert.ToString(vvcUInt16, 2).PadLeft(16, paddingChar: '0'); } catch { bits_str = "_"; }
+                                        buff_Log += " BIN : [" + bits_str + "] ";
+                                    }
+                                    if (chek_UInt16 == true)
+                                    {
+                                        ushort vvcUInt16;
+                                        try { vvcUInt16 = BitConverter.ToUInt16(customviewValue16, 0); } catch { vvcUInt16 = 0; }
+                                        buff_Log += "(UInt16) : " + string.Format("{0:D5}", vvcUInt16);
+                                    }
+                                    if (chek_Int16 == true)
+                                    {
+                                        short vvc_Int16;
+                                        try { vvc_Int16 = BitConverter.ToInt16(customviewValue16, 0); } catch { vvc_Int16 = 0; }
+                                        buff_Log += " (Int16) : " + string.Format("{0:D5}", vvc_Int16);
+                                    }
+                                }
+                                buff_Log += new_line;
+                            }
+                        }
+                    }
+                }
+                if (frame[1] == 0x10)
+                {
+                    for (int i = 2; i < frame.Length - 2; i++)
+                    {
+                        if (i < 4)
+                        {
+                            if (i == 2)
+                            {
+                                buff_Log += "                 [REQ] : ";
+                                buff_Log += new_line;
+                                buff_Log += "                 START REG  : ";
+                                buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
+                            }
+                            if (i == 3)
+                            {
+                                buff_Log += string.Format("{0:X2}", frame[i]) + "]";
+                                buff_Log += " (DEC) : " + string.Format("{0:d5}", (ushort)((ushort)(frame[i - 1] << 8) + frame[i]));
+                                buff_Log += new_line;
+                            }
+                        }
+                        if (i > 3)
+                        {
+                            if (i == 4)
+                            {
+                                buff_Log += "                 NUM OF REG : ";
+                                buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
+                            }
+                            if (i == 5)
+                            {
+                                buff_Log += string.Format("{0:X2}", frame[i]) + "]";
+                                buff_Log += " (DEC) : " + string.Format("{0:d5}", (ushort)((ushort)(frame[i - 1] << 8) + frame[i]));
+                                buff_Log += new_line;
+                            }
+                        }
+                        if (i == 6)
+                        {
+                                buff_Log += "                 Byte Count: [";
+                                buff_Log += string.Format("{0:X2}", frame[i]) + "]";
+                                buff_Log += " (DEC) : " + string.Format("{0:d5}", frame[i]);
+                                buff_Log += new_line;
+                        }
+                        if (i > 6)
+                        {
+                            if (i % 2 != 0)
+                            {
+                            buff_Log += "                   REG VAL : ";
+                            buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
+                            }
+                            if (i % 2 == 0 )
+                            {
+                                buff_Log += string.Format("{0:X2}", frame[i]) + "] ";
+                                if (chek_Bin == true || chek_UInt16 == true || chek_Int16 == true)
+                                {
+                                    if (orderbyte16 == "") { orderbyte16 = "AB"; }
+                                    char[] orderbyte = orderbyte16.ToCharArray();
+                                    byte[] customviewValue16 = new byte[2];
+                                    customviewValue16[orderbyte[0] - 65] = frame[i];
+                                    customviewValue16[orderbyte[1] - 65] = frame[i - 1];
+
+                                    if (chek_Bin == true)
+                                    {
+                                        ushort vvcUInt16;
+                                        try { vvcUInt16 = BitConverter.ToUInt16(customviewValue16, 0); } catch { vvcUInt16 = 0; }
+                                        string bits_str;
+                                        try { bits_str = Convert.ToString(vvcUInt16, 2).PadLeft(16, paddingChar: '0'); } catch { bits_str = "_"; }
+                                        buff_Log += " BIN : [" + bits_str + "] ";
+                                    }
+                                    if (chek_UInt16 == true)
+                                    {
+                                        ushort vvcUInt16;
+                                        try { vvcUInt16 = BitConverter.ToUInt16(customviewValue16, 0); } catch { vvcUInt16 = 0; }
+                                        buff_Log += "(UInt16) : " + string.Format("{0:D5}", vvcUInt16);
+                                    }
+                                    if (chek_Int16 == true)
+                                    {
+                                        short vvc_Int16;
+                                        try { vvc_Int16 = BitConverter.ToInt16(customviewValue16, 0); } catch { vvc_Int16 = 0; }
+                                        buff_Log += " (Int16) : " + string.Format("{0:D5}", vvc_Int16);
+                                    }
+                                }
+                                if ((j > 0) && ((j + 1) % 2 == 0) && ((chek_UInt32 == true) || (chek_Int32 == true) || (chek_Float == true)))
+                                {
+                                    if (orderbyte32 == "") { orderbyte32 = "ABCD"; }
+                                    char[] orderbyte = orderbyte32.ToCharArray();
+                                    byte[] customviewValue32 = new byte[4];
+                                    customviewValue32[orderbyte[0] - 65] = frame[i];    //A
+                                    customviewValue32[orderbyte[1] - 65] = frame[i - 1];//B
+                                    customviewValue32[orderbyte[2] - 65] = frame[i - 2];//C
+                                    customviewValue32[orderbyte[3] - 65] = frame[i - 3];//D
+
+                                    if (chek_UInt32 == true)
+                                    {
+                                        UInt32 vvcUInt32;
+                                        try { vvcUInt32 = BitConverter.ToUInt32(customviewValue32, 0); } catch { vvcUInt32 = 0; }
+                                        buff_Log += " (UInt32) : " + string.Format("{0:D5}", vvcUInt32);
+                                    }
+                                    if (chek_Int32 == true)
+                                    {
+                                        Int32 vvcInt32;
+                                        try { vvcInt32 = BitConverter.ToInt32(customviewValue32, 0); } catch { vvcInt32 = 0; }
+                                        buff_Log += " (Int32) : " + string.Format("{0:D5}", vvcInt32);
+                                    }
+                                    if (chek_Float == true)
+                                    {
+                                        float vvcFloat;
+                                        try { vvcFloat = BitConverter.ToSingle(customviewValue32, 0); } catch { vvcFloat = 0.0F; }
+                                        buff_Log += " (Float) : " + vvcFloat.ToString("0.0000");
+                                    }
+                                }
+                                j++;
+                                buff_Log += new_line;
+                            }
+                        }
+                    }
                 }
                 buff_Log += new_line;
                 buff_Log += "                 [CRC] : ";
@@ -257,7 +517,7 @@ namespace modbus_rtu_spy
                                     try { vvcUInt16 = BitConverter.ToUInt16(customviewValue16, 0); } catch { vvcUInt16 = 0; }
                                     string bits_str;
                                     try { bits_str = Convert.ToString(vvcUInt16, 2).PadLeft(16, paddingChar: '0'); } catch { bits_str = "_"; }
-                                    buff_Log += " BIN : [" + bits_str + "]";
+                                    buff_Log += " BIN : [" + bits_str + "] ";
                                 }
                                 if (chek_UInt16 == true)
                                 {
@@ -272,16 +532,14 @@ namespace modbus_rtu_spy
                                     buff_Log += " (Int16) : " + string.Format("{0:D5}", vvc_Int16);
                                 }
                             }
-
                             if ((j > 0) && ((j + 1) % 2 == 0) && ((chek_UInt32 == true) || (chek_Int32 == true) || (chek_Float == true)))
                             {
-                                //orderbyte32
                                 if (orderbyte32 == "") { orderbyte32 = "ABCD"; }
                                 char[] orderbyte = orderbyte32.ToCharArray();
                                 byte[] customviewValue32 = new byte[4];
-                                customviewValue32[orderbyte[0] - 65] = frame[i];//A
+                                customviewValue32[orderbyte[0] - 65] = frame[i];    //A
                                 customviewValue32[orderbyte[1] - 65] = frame[i - 1];//B
-                                customviewValue32[orderbyte[2] - 65] = frame[i - 2];    //C
+                                customviewValue32[orderbyte[2] - 65] = frame[i - 2];//C
                                 customviewValue32[orderbyte[3] - 65] = frame[i - 3];//D
 
                                 if (chek_UInt32 == true)
@@ -303,13 +561,10 @@ namespace modbus_rtu_spy
                                     buff_Log += " (Float) : " + vvcFloat.ToString("0.0000");
                                 }
                             }
-
                             k = 0;
                             j++;
                             buff_Log += new_line;
                         }
-
-
                     }
 
                     buff_Log += new_line;
@@ -350,12 +605,9 @@ namespace modbus_rtu_spy
                     buff_Log += " [DEV] : " + string.Format("{0:X2}", frame[0]);
                     buff_Log += " [FUN] : " + string.Format("{0:X2}", frame[1]);
                     buff_Log += new_line;
-                    buff_Log += " [ANS] : ";
-                    buff_Log += new_line;
-
+                    buff_Log += "                 [ANS] : ";
                     for (int i = 2; i < frame.Length - 2; i++)
                     {
-
                         buff_Log += string.Format("{0:X2}", frame[i]) + " ";
                     }
 
