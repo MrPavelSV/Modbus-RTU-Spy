@@ -1,0 +1,631 @@
+[start capture]===================================================================================================
+
+0001 : master=>  [DEV] : 01 [FUN] : 06
+                 [REQ] : 
+                 START REG : [00 00] (DEC) : 00000
+                   REG VAL : [7E 64] 
+
+                 [CRC] : A9 81 
+
+0002 : <= slave  [DEV] : 01 [FUN] : 06
+                 [ANS] : 
+                 START REG : [00 00] (DEC) : 00000
+                   REG VAL : [7E 64] 
+
+                 [CRC] : A9 81 
+
+0003 : master=>  [DEV] : 01 [FUN] : 06
+                 [REQ] : 
+                 START REG : [00 01] (DEC) : 00001
+                   REG VAL : [21 82] 
+
+                 [CRC] : 40 3B 
+
+0004 : <= slave  [DEV] : 01 [FUN] : 06
+                 [ANS] : 
+                 START REG : [00 01] (DEC) : 00001
+                   REG VAL : [21 82] 
+
+                 [CRC] : 40 3B 
+
+0005 : master=>  [DEV] : 01 [FUN] : 06
+                 [REQ] : 
+                 START REG : [00 02] (DEC) : 00002
+                   REG VAL : [33 2A] 
+
+                 [CRC] : BD 25 
+
+0006 : <= slave  [DEV] : 01 [FUN] : 06
+                 [ANS] : 
+                 START REG : [00 02] (DEC) : 00002
+                   REG VAL : [33 2A] 
+
+                 [CRC] : BD 25 
+
+0007 : master=>  [DEV] : 01 [FUN] : 06
+                 [REQ] : 
+                 START REG : [00 03] (DEC) : 00003
+                   REG VAL : [6C CC] 
+
+                 [CRC] : 54 9F 
+
+0008 : <= slave  [DEV] : 01 [FUN] : 06
+                 [ANS] : 
+                 START REG : [00 03] (DEC) : 00003
+                   REG VAL : [6C CC] 
+
+                 [CRC] : 54 9F 
+
+0009 : master=>  [DEV] : 01 [FUN] : 06
+                 [REQ] : 
+                 START REG : [00 04] (DEC) : 00004
+                   REG VAL : [F0 98] 
+
+                 [CRC] : 8D A1 
+
+0010 : <= slave  [DEV] : 01 [FUN] : 06
+                 [ANS] : 
+                 START REG : [00 04] (DEC) : 00004
+                   REG VAL : [F0 98] 
+
+                 [CRC] : 8D A1 
+
+0011 : master=>  [DEV] : 01 [FUN] : 06
+                 [REQ] : 
+                 START REG : [00 05] (DEC) : 00005
+                   REG VAL : [7F F4] 
+
+                 [CRC] : B8 7C 
+
+0012 : <= slave  [DEV] : 01 [FUN] : 06
+                 [ANS] : 
+                 START REG : [00 05] (DEC) : 00005
+                   REG VAL : [7F F4] 
+
+                 [CRC] : B8 7C 
+
+0013 : master=>  [DEV] : 01 [FUN] : 06
+                 [REQ] : 
+                 START REG : [00 06] (DEC) : 00006
+                   REG VAL : [25 0E] 
+
+                 [CRC] : F2 9F 
+
+0014 : <= slave  [DEV] : 01 [FUN] : 06
+                 [ANS] : 
+                 START REG : [00 06] (DEC) : 00006
+                   REG VAL : [25 0E] 
+
+                 [CRC] : F2 9F 
+
+0015 : master=>  [DEV] : 01 [FUN] : 06
+                 [REQ] : 
+                 START REG : [00 07] (DEC) : 00007
+                   REG VAL : [1C B4] 
+
+                 [CRC] : 30 BC 
+
+0016 : <= slave  [DEV] : 01 [FUN] : 06
+                 [ANS] : 
+                 START REG : [00 07] (DEC) : 00007
+                   REG VAL : [1C B4] 
+
+                 [CRC] : 30 BC 
+
+0017 : master=>  [DEV] : 01 [FUN] : 06
+                 [REQ] : 
+                 START REG : [00 08] (DEC) : 00008
+                   REG VAL : [AC 8C] 
+
+                 [CRC] : 74 AD 
+
+0018 : <= slave  [DEV] : 01 [FUN] : 06
+                 [ANS] : 
+                 START REG : [00 08] (DEC) : 00008
+                   REG VAL : [AC 8C] 
+
+                 [CRC] : 74 AD 
+
+0019 : master=>  [DEV] : 01 [FUN] : 06
+                 [REQ] : 
+                 START REG : [00 09] (DEC) : 00009
+                   REG VAL : [73 FA] 
+
+                 [CRC] : FC BB 
+
+0020 : <= slave  [DEV] : 01 [FUN] : 06
+                 [ANS] : 
+                 START REG : [00 09] (DEC) : 00009
+                   REG VAL : [73 FA] 
+
+                 [CRC] : FC BB 
+
+0021 : master=>  [DEV] : 01 [FUN] : 06
+                 [REQ] : 
+                 START REG : [00 0A] (DEC) : 00010
+                   REG VAL : [5C 5A] 
+
+                 [CRC] : 10 F3 
+
+0022 : <= slave  [DEV] : 01 [FUN] : 06
+                 [ANS] : 
+                 START REG : [00 0A] (DEC) : 00010
+                   REG VAL : [5C 5A] 
+
+                 [CRC] : 10 F3 
+
+0023 : master=>  [DEV] : 01 [FUN] : 06
+                 [REQ] : 
+                 START REG : [00 0B] (DEC) : 00011
+                   REG VAL : [51 32] 
+
+                 [CRC] : 44 4D 
+
+0024 : <= slave  [DEV] : 01 [FUN] : 06
+                 [ANS] : 
+                 START REG : [00 0B] (DEC) : 00011
+                   REG VAL : [51 32] 
+
+                 [CRC] : 44 4D 
+
+0025 : master=>  [DEV] : 01 [FUN] : 06
+                 [REQ] : 
+                 START REG : [00 0C] (DEC) : 00012
+                   REG VAL : [F6 F2] 
+
+                 [CRC] : 8F EC 
+
+0026 : <= slave  [DEV] : 01 [FUN] : 06
+                 [ANS] : 
+                 START REG : [00 0C] (DEC) : 00012
+                   REG VAL : [F6 F2] 
+
+                 [CRC] : 8F EC 
+
+0027 : master=>  [DEV] : 01 [FUN] : 06
+                 [REQ] : 
+                 START REG : [00 0D] (DEC) : 00013
+                   REG VAL : [53 D2] 
+
+                 [CRC] : A4 A4 
+
+0028 : <= slave  [DEV] : 01 [FUN] : 06
+                 [ANS] : 
+                 START REG : [00 0D] (DEC) : 00013
+                   REG VAL : [53 D2] 
+
+                 [CRC] : A4 A4 
+
+0029 : master=>  [DEV] : 01 [FUN] : 06
+                 [REQ] : 
+                 START REG : [00 0E] (DEC) : 00014
+                   REG VAL : [E0 B4] 
+
+                 [CRC] : A1 BE 
+
+0030 : <= slave  [DEV] : 01 [FUN] : 06
+                 [ANS] : 
+                 START REG : [00 0E] (DEC) : 00014
+                   REG VAL : [E0 B4] 
+
+                 [CRC] : A1 BE 
+
+0031 : master=>  [DEV] : 01 [FUN] : 06
+                 [REQ] : 
+                 START REG : [00 0F] (DEC) : 00015
+                   REG VAL : [73 2C] 
+
+                 [CRC] : 9D 24 
+
+0032 : <= slave  [DEV] : 01 [FUN] : 06
+                 [ANS] : 
+                 START REG : [00 0F] (DEC) : 00015
+                   REG VAL : [73 2C] 
+
+                 [CRC] : 9D 24 
+
+0033 : master=>  [DEV] : 01 [FUN] : 10
+                 [REQ] : 
+                 START REG  : [00 10] (DEC) : 00016
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [00 0D] 
+                    REG VAL : [80 07] 
+
+                 [CRC] : 43 62 
+
+0034 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 10 00 02 
+                 [CRC] : 40 0D 
+
+0035 : master=>  [DEV] : 01 [FUN] : 10
+                 [REQ] : 
+                 START REG  : [00 12] (DEC) : 00018
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [0A 68] 
+                    REG VAL : [05 34] 
+
+                 [CRC] : F3 F9 
+
+0036 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 12 00 02 
+                 [CRC] : E1 CD 
+
+0037 : master=>  [DEV] : 01 [FUN] : 10
+                 [REQ] : 
+                 START REG  : [00 14] (DEC) : 00020
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [10 F5] 
+                    REG VAL : [88 7B] 
+
+                 [CRC] : C1 81 
+
+0038 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 14 00 02 
+                 [CRC] : 01 CC 
+
+0039 : master=>  [DEV] : 01 [FUN] : 10
+                 [REQ] : 
+                 START REG  : [00 16] (DEC) : 00022
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [BD E2] 
+                    REG VAL : [DE F1] 
+
+                 [CRC] : 6E F7 
+
+0040 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 16 00 02 
+                 [CRC] : A0 0C 
+
+0041 : master=>  [DEV] : 01 [FUN] : 10
+                 [REQ] : 
+                 START REG  : [00 18] (DEC) : 00024
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [1A 64] 
+                    REG VAL : [0D 32] 
+
+                 [CRC] : 30 87 
+
+0042 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 18 00 02 
+                 [CRC] : C1 CF 
+
+0043 : master=>  [DEV] : 01 [FUN] : 10
+                 [REQ] : 
+                 START REG  : [00 1A] (DEC) : 00026
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [B7 E1] 
+                    REG VAL : [5B F0] 
+
+                 [CRC] : 3E 2A 
+
+0044 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 1A 00 02 
+                 [CRC] : 60 0F 
+
+0045 : master=>  [DEV] : 01 [FUN] : 10
+                 [REQ] : 
+                 START REG  : [00 1C] (DEC) : 00028
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [5B 78] 
+                    REG VAL : [2D BC] 
+
+                 [CRC] : 7D 2A 
+
+0046 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 1C 00 02 
+                 [CRC] : 80 0E 
+
+0047 : master=>  [DEV] : 01 [FUN] : 10
+                 [REQ] : 
+                 START REG  : [00 1E] (DEC) : 00030
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [D1 C9] 
+                    REG VAL : [68 E4] 
+
+                 [CRC] : B5 A6 
+
+0048 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 1E 00 02 
+                 [CRC] : 21 CE 
+
+0049 : master=>  [DEV] : 01 [FUN] : 10
+                 [REQ] : 
+                 START REG  : [00 20] (DEC) : 00032
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [E0 75] 
+                    REG VAL : [70 3A] 
+
+                 [CRC] : 72 7E 
+
+0050 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 20 00 02 
+                 [CRC] : 40 02 
+
+0051 : master=>  [DEV] : 01 [FUN] : 10
+                 [REQ] : 
+                 START REG  : [00 22] (DEC) : 00034
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [D3 42] 
+                    REG VAL : [E9 A1] 
+
+                 [CRC] : 66 D6 
+
+0052 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 22 00 02 
+                 [CRC] : E1 C2 
+
+0053 : master=>  [DEV] : 01 [FUN] : 10
+                 [REQ] : 
+                 START REG  : [00 24] (DEC) : 00036
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [3B 00] 
+                    REG VAL : [1D 80] 
+
+                 [CRC] : F5 90 
+
+0054 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 24 00 02 
+                 [CRC] : 01 C3 
+
+0055 : master=>  [DEV] : 01 [FUN] : 10
+                 [REQ] : 
+                 START REG  : [00 26] (DEC) : 00038
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [65 60] 
+                    REG VAL : [32 B0] 
+
+                 [CRC] : 7B 9B 
+
+0056 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 26 00 02 
+                 [CRC] : A0 03 
+
+0057 : master=>  [DEV] : 01 [FUN] : 10
+                 [REQ] : 
+                 START REG  : [00 28] (DEC) : 00040
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [F9 A1] 
+                    REG VAL : [7C D0] 
+
+                 [CRC] : B0 33 
+
+0058 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 28 00 02 
+                 [CRC] : C1 C0 
+
+0059 : master=>  [DEV] : 01 [FUN] : 10
+                 [REQ] : 
+                 START REG  : [00 2A] (DEC) : 00042
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [97 40] 
+                    REG VAL : [4B A0] 
+
+                 [CRC] : 6A E0 
+
+0060 : no answer 01 10 00 2A 00 02 60 
+
+0061 : master=>  [DEV] : 01 [FUN] : 10
+                 [REQ] : 
+                 START REG  : [00 2C] (DEC) : 00044
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [DE 66] 
+                    REG VAL : [EF 33] 
+
+                 [CRC] : 27 F0 
+
+0062 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 2C 00 02 
+                 [CRC] : 80 01 
+
+0063 : master=>  [DEV] : 01 [FUN] : 10
+                 [REQ] : 
+                 START REG  : [00 2E] (DEC) : 00046
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [F6 6A] 
+                    REG VAL : [FB 35] 
+
+                 [CRC] : E0 88 
+
+0064 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 2E 00 02 
+                 [CRC] : 21 C1 
+
+0065 : master=>  [DEV] : 01 [FUN] : 10
+                 [REQ] : 
+                 START REG  : [00 30] (DEC) : 00048
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [E0 75] 
+                    REG VAL : [70 3A] 
+
+                 [CRC] : 73 72 
+
+0066 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 30 00 02 
+                 [CRC] : 41 C7 
+
+0067 : master=>  [DEV] : 01 [FUN] : 10
+                 [REQ] : 
+                 START REG  : [00 32] (DEC) : 00050
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [D3 42] 
+                    REG VAL : [E9 A1] 
+
+                 [CRC] : 67 DA 
+
+0068 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 32 00 02 
+                 [CRC] : E0 07 
+
+0069 : master=>  [DEV] : 01 [FUN] : 10
+                 [REQ] : 
+                 START REG  : [00 34] (DEC) : 00052
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [3B 00] 
+                    REG VAL : [1D 80] 
+
+                 [CRC] : F4 9C 
+
+0070 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 34 00 02 
+                 [CRC] : 00 06 
+
+0071 : master=>  [DEV] : 01 [FUN] : 10
+                 [REQ] : 
+                 START REG  : [00 36] (DEC) : 00054
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [65 60] 
+                    REG VAL : [32 B0] 
+
+                 [CRC] : 7A 97 
+
+0072 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 36 00 02 
+                 [CRC] : A1 C6 
+
+0073 : master=>  [DEV] : 01 [FUN] : 10
+                 [REQ] : 
+                 START REG  : [00 38] (DEC) : 00056
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [F9 A1] 
+                    REG VAL : [7C D0] 
+
+                 [CRC] : B1 3F 
+
+0074 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 38 00 02 
+                 [CRC] : C0 05 
+
+0075 : master=>  [DEV] : 01 [FUN] : 10
+                 [REQ] : 
+                 START REG  : [00 3A] (DEC) : 00058
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [97 40] 
+                    REG VAL : [4B A0] 
+
+                 [CRC] : 6B EC 
+
+0076 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 3A 00 02 
+                 [CRC] : 61 C5 
+
+0077 : master=>  [DEV] : 01 [FUN] : 10
+                 [REQ] : 
+                 START REG  : [00 3C] (DEC) : 00060
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [DE 66] 
+                    REG VAL : [EF 33] 
+
+                 [CRC] : 26 FC 
+
+0078 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 3C 00 02 
+                 [CRC] : 81 C4 
+
+0079 : master=>  [DEV] : 01 [FUN] : 10
+                 [REQ] : 
+                 START REG  : [00 3E] (DEC) : 00062
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [F6 6A] 
+                    REG VAL : [FB 35] 
+
+                 [CRC] : E1 84 
+
+0080 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 3E 00 02 
+                 [CRC] : 20 04 
+
+0081 : master=>  [DEV] : 01 [FUN] : 01
+                 [REQ] : 
+                 START BIN  : [00 00] (DEC) : 00000
+                 NUM OF BIN : [00 10] (DEC) : 00016
+
+                 [CRC] : 3D C6 
+
+0082 : <= slave  [DEV] : 01 [FUN] : 01 [CBD] (HEX): 02 (DEC) : 002
+                 [ANS] : 
+                 +0000 (HEX):[00] BIN : [00000000]
+                 +0008 (HEX):[00] BIN : [00000000]
+
+                 [CRC] : B9 FC 
+
+0083 : master=>  [DEV] : 01 [FUN] : 02
+                 [REQ] : 
+                 START BIN  : [00 00] (DEC) : 00000
+                 NUM OF BIN : [00 10] (DEC) : 00016
+
+                 [CRC] : 79 C6 
+
+0084 : <= slave  [DEV] : 01 [FUN] : 02 [CBD] (HEX): 02 (DEC) : 002
+                 [ANS] : 
+                 +0000 (HEX):[00] BIN : [00000000]
+                 +0008 (HEX):[00] BIN : [00000000]
+
+                 [CRC] : B9 B8 
+
+0085 : master=>  [DEV] : 01 [FUN] : 04
+                 [REQ] : 
+                 START REG  : [00 00] (DEC) : 00000
+                 NUM OF REG : [00 08] (DEC) : 00008
+
+                 [CRC] : F1 CC 
+
+0086 : <= slave  [DEV] : 01 [FUN] : 04 [CBD] (HEX): 10 (DEC) : 016 (REG) : 008
+                 [ANS] : 
+                 +0000:(HEX)[7E 64] 
+                 +0001:(HEX)[21 82] 
+                 +0002:(HEX)[33 2A] 
+                 +0003:(HEX)[6C CC] 
+                 +0004:(HEX)[F0 98] 
+                 +0005:(HEX)[7F F4] 
+                 +0006:(HEX)[25 0E] 
+                 +0007:(HEX)[1C B4] 
+
+                 [CRC] : 8F 12 
+
+0087 : master=>  [DEV] : 01 [FUN] : 03
+                 [REQ] : 
+                 START REG  : [00 08] (DEC) : 00008
+                 NUM OF REG : [00 08] (DEC) : 00008
+
+                 [CRC] : C5 CE 
+
+0088 : <= slave  [DEV] : 01 [FUN] : 03 [CBD] (HEX): 10 (DEC) : 016 (REG) : 008
+                 [ANS] : 
+                 +0000:(HEX)[AC 8C] 
+                 +0001:(HEX)[73 FA] 
+                 +0002:(HEX)[5C 5A] 
+                 +0003:(HEX)[51 32] 
+                 +0004:(HEX)[F6 F2] 
+                 +0005:(HEX)[53 D2] 
+                 +0006:(HEX)[E0 B4] 
+                 +0007:(HEX)[73 2C] 
+
+                 [CRC] : 6B 3E 
+
+ByteOrder16 = AB ByteOrder32 = ABCD
+[end capture]=====================================================================================================
+15:37:55:953 [847] bytes
