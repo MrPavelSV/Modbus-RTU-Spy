@@ -393,7 +393,7 @@ namespace modbus_rtu_spy
                         }
                         if (i == 6)
                         {
-                                buff_Log += "                 Byte Count: [";
+                                buff_Log += "                 Byte Count : [";
                                 buff_Log += string.Format("{0:X2}", frame[i]) + "]";
                                 buff_Log += " (DEC) : " + string.Format("{0:d5}", frame[i]);
                                 buff_Log += new_line;
@@ -402,7 +402,7 @@ namespace modbus_rtu_spy
                         {
                             if (i % 2 != 0)
                             {
-                            buff_Log += "                   REG VAL : ";
+                            buff_Log += "                    REG VAL : ";
                             buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
                             }
                             if (i % 2 == 0 )
