@@ -1,0 +1,212 @@
+[start capture]===================================================================================================
+
+0001 : master=>  [DEV] : 01 [FUN] : 0F Write Multiple Coils
+                 START Coil  : [00 00] (DEC) : 00000
+                 NUM OF Coil : [00 10] (DEC) : 00016
+                 Byte Count : [02] (DEC) : 00002
+                 +0000 (HEX):[00] BIN : [00000000]
+                 +0008 (HEX):[00] BIN : [00000000]
+
+                 [CRC] : E2 20 
+
+0002 : <= slave  [DEV] : 01 [FUN] : 0F
+                 [ANS] : 00 00 00 10 
+                 [CRC] : 54 07 
+
+0003 : master=>  [DEV] : 01 [FUN] : 06 Write Single Register
+                 START REG : [00 00] (DEC) : 00000
+                   REG VAL : [E7 52]  BIN : [1110011101010010] (UInt16) : 59218 (Int16) : -06318
+
+                 [CRC] : 43 C7 
+
+0004 : <= slave  [DEV] : 01 [FUN] : 06
+                 [ANS] : 
+                 START REG : [00 00] (DEC) : 00000
+                   REG VAL : [E7 52]  BIN : [1110011101010010] (UInt16) : 59218 (Int16) : -06318
+
+                 [CRC] : 43 C7 
+
+0005 : master=>  [DEV] : 01 [FUN] : 06 Write Single Register
+                 START REG : [00 01] (DEC) : 00001
+                   REG VAL : [D7 60]  BIN : [1101011101100000] (UInt16) : 55136 (Int16) : -10400
+
+                 [CRC] : 87 D2 
+
+0006 : <= slave  [DEV] : 01 [FUN] : 06
+                 [ANS] : 
+                 START REG : [00 01] (DEC) : 00001
+                   REG VAL : [D7 60]  BIN : [1101011101100000] (UInt16) : 55136 (Int16) : -10400
+
+                 [CRC] : 87 D2 
+
+0007 : master=>  [DEV] : 01 [FUN] : 06 Write Single Register
+                 START REG : [00 08] (DEC) : 00008
+                   REG VAL : [69 9E]  BIN : [0110100110011110] (UInt16) : 27038 (Int16) : 27038
+
+                 [CRC] : A7 F0 
+
+0008 : <= slave  [DEV] : 01 [FUN] : 06
+                 [ANS] : 
+                 START REG : [00 08] (DEC) : 00008
+                   REG VAL : [69 9E]  BIN : [0110100110011110] (UInt16) : 27038 (Int16) : 27038
+
+                 [CRC] : A7 F0 
+
+0009 : master=>  [DEV] : 01 [FUN] : 06 Write Single Register
+                 START REG : [00 09] (DEC) : 00009
+                   REG VAL : [ED 44]  BIN : [1110110101000100] (UInt16) : 60740 (Int16) : -04796
+
+                 [CRC] : 14 AB 
+
+0010 : <= slave  [DEV] : 01 [FUN] : 06
+                 [ANS] : 
+                 START REG : [00 09] (DEC) : 00009
+                   REG VAL : [ED 44]  BIN : [1110110101000100] (UInt16) : 60740 (Int16) : -04796
+
+                 [CRC] : 14 AB 
+
+0011 : master=>  [DEV] : 01 [FUN] : 10 Write Multiple registers
+                 START REG  : [00 10] (DEC) : 00016
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [9D 08]  BIN : [1001110100001000] (UInt16) : 40200 (Int16) : -25336
+                    REG VAL : [4E 84]  BIN : [0100111010000100] (UInt16) : 20100 (Int16) : 20100 (UInt32) : 2634567300 (Int32) : -1660399996 (Float) : 0,0000
+
+                 [CRC] : 69 0E 
+
+0012 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 10 00 02 
+                 [CRC] : 40 0D 
+
+0013 : master=>  [DEV] : 01 [FUN] : 10 Write Multiple registers
+                 START REG  : [00 12] (DEC) : 00018
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [E7 69]  BIN : [1110011101101001] (UInt16) : 59241 (Int16) : -06295
+                    REG VAL : [73 B4]  BIN : [0111001110110100] (UInt16) : 29620 (Int16) : 29620 (UInt32) : 3882447796 (Int32) : -412519500 (Float) : -1102446000000000000000000,0000
+
+                 [CRC] : B0 95 
+
+0014 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 12 00 02 
+                 [CRC] : E1 CD 
+
+0015 : master=>  [DEV] : 01 [FUN] : 10 Write Multiple registers
+                 START REG  : [00 20] (DEC) : 00032
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [6E E8]  BIN : [0110111011101000] (UInt16) : 28392 (Int16) : 28392
+                    REG VAL : [37 74]  BIN : [0011011101110100] (UInt16) : 14196 (Int16) : 14196 (UInt32) : 1860712308 (Int32) : 1860712308 (Float) : 35933780000000000000000000000,0000
+
+                 [CRC] : 7B 7C 
+
+0016 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 20 00 02 
+                 [CRC] : 40 02 
+
+0017 : master=>  [DEV] : 01 [FUN] : 10 Write Multiple registers
+                 START REG  : [00 22] (DEC) : 00034
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [AB BD]  BIN : [1010101110111101] (UInt16) : 43965 (Int16) : -21571
+                    REG VAL : [55 DE]  BIN : [0101010111011110] (UInt16) : 21982 (Int16) : 21982 (UInt32) : 2881312222 (Int32) : -1413655074 (Float) : 0,0000
+
+                 [CRC] : 7F 66 
+
+0018 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 22 00 02 
+                 [CRC] : E1 C2 
+
+0019 : master=>  [DEV] : 01 [FUN] : 10 Write Multiple registers
+                 START REG  : [00 30] (DEC) : 00048
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [6E E8]  BIN : [0110111011101000] (UInt16) : 28392 (Int16) : 28392
+                    REG VAL : [37 74]  BIN : [0011011101110100] (UInt16) : 14196 (Int16) : 14196 (UInt32) : 1860712308 (Int32) : 1860712308 (Float) : 35933780000000000000000000000,0000
+
+                 [CRC] : 7A 70 
+
+0020 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 30 00 02 
+                 [CRC] : 41 C7 
+
+0021 : master=>  [DEV] : 01 [FUN] : 10 Write Multiple registers
+                 START REG  : [00 32] (DEC) : 00050
+                 NUM OF REG : [00 02] (DEC) : 00002
+                 Byte Count : [04] (DEC) : 00004
+                    REG VAL : [AB BD]  BIN : [1010101110111101] (UInt16) : 43965 (Int16) : -21571
+                    REG VAL : [55 DE]  BIN : [0101010111011110] (UInt16) : 21982 (Int16) : 21982 (UInt32) : 2881312222 (Int32) : -1413655074 (Float) : 0,0000
+
+                 [CRC] : 7E 6A 
+
+0022 : <= slave  [DEV] : 01 [FUN] : 10
+                 [ANS] : 00 32 00 02 
+                 [CRC] : E0 07 
+
+0023 : master=>  [DEV] : 01 [FUN] : 01 Read Coils
+                 START BIN  : [00 00] (DEC) : 00000
+                 NUM OF BIN : [00 10] (DEC) : 00016
+
+                 [CRC] : 3D C6 
+
+0024 : <= slave  [DEV] : 01 [FUN] : 01 [CBD] (HEX): 02 (DEC) : 002
+                 [ANS] : 
+                 +0000 (HEX):[00] BIN : [00000000]
+                 +0008 (HEX):[00] BIN : [00000000]
+
+                 [CRC] : B9 FC 
+
+0025 : master=>  [DEV] : 01 [FUN] : 02 Read Discrete Inputs
+                 START BIN  : [00 00] (DEC) : 00000
+                 NUM OF BIN : [00 10] (DEC) : 00016
+
+                 [CRC] : 79 C6 
+
+0026 : <= slave  [DEV] : 01 [FUN] : 02 [CBD] (HEX): 02 (DEC) : 002
+                 [ANS] : 
+                 +0000 (HEX):[00] BIN : [00000000]
+                 +0008 (HEX):[00] BIN : [00000000]
+
+                 [CRC] : B9 B8 
+
+0027 : master=>  [DEV] : 01 [FUN] : 04 Read Input Registers
+                 START REG  : [00 00] (DEC) : 00000
+                 NUM OF REG : [00 08] (DEC) : 00008
+
+                 [CRC] : F1 CC 
+
+0028 : <= slave  [DEV] : 01 [FUN] : 04 [CBD] (HEX): 10 (DEC) : 016 (REG) : 008
+                 [ANS] : 
+                 +0000:(HEX)[E7 52]  BIN : [1110011101010010] (UInt16) : 59218 (Int16) : -06318
+                 +0001:(HEX)[D7 60]  BIN : [1101011101100000] (UInt16) : 55136 (Int16) : -10400 (UInt32) : 3880965984 (Int32) : -414001312 (Float) : -995669900000000000000000,0000
+                 +0002:(HEX)[99 44]  BIN : [1001100101000100] (UInt16) : 39236 (Int16) : -26300
+                 +0003:(HEX)[7D 76]  BIN : [0111110101110110] (UInt16) : 32118 (Int16) : 32118 (UInt32) : 2571402614 (Int32) : -1723564682 (Float) : 0,0000
+                 +0004:(HEX)[D1 8C]  BIN : [1101000110001100] (UInt16) : 53644 (Int16) : -11892
+                 +0005:(HEX)[24 7A]  BIN : [0010010001111010] (UInt16) : 09338 (Int16) : 09338 (UInt32) : 3515622522 (Int32) : -779344774 (Float) : -75238420000,0000
+                 +0006:(HEX)[8D 92]  BIN : [1000110110010010] (UInt16) : 36242 (Int16) : -29294
+                 +0007:(HEX)[7F CE]  BIN : [0111111111001110] (UInt16) : 32718 (Int16) : 32718 (UInt32) : 2375188430 (Int32) : -1919778866 (Float) : 0,0000
+
+                 [CRC] : ED 50 
+
+0029 : master=>  [DEV] : 01 [FUN] : 03 Read Holding Registers
+                 START REG  : [00 08] (DEC) : 00008
+                 NUM OF REG : [00 08] (DEC) : 00008
+
+                 [CRC] : C5 CE 
+
+0030 : <= slave  [DEV] : 01 [FUN] : 03 [CBD] (HEX): 10 (DEC) : 016 (REG) : 008
+                 [ANS] : 
+                 +0000:(HEX)[69 9E]  BIN : [0110100110011110] (UInt16) : 27038 (Int16) : 27038
+                 +0001:(HEX)[ED 44]  BIN : [1110110101000100] (UInt16) : 60740 (Int16) : -04796 (UInt32) : 1772023108 (Int32) : 1772023108 (Float) : 24016340000000000000000000,0000
+                 +0002:(HEX)[F7 66]  BIN : [1111011101100110] (UInt16) : 63334 (Int16) : -02202
+                 +0003:(HEX)[80 36]  BIN : [1000000000110110] (UInt16) : 32822 (Int16) : -32714 (UInt32) : 4150689846 (Int32) : -144277450 (Float) : -4675112000000000000000000000000000,0000
+                 +0004:(HEX)[BF 8E]  BIN : [1011111110001110] (UInt16) : 49038 (Int16) : -16498
+                 +0005:(HEX)[97 10]  BIN : [1001011100010000] (UInt16) : 38672 (Int16) : -26864 (UInt32) : 3213793040 (Int32) : -1081174256 (Float) : -1,1140
+                 +0006:(HEX)[95 0C]  BIN : [1001010100001100] (UInt16) : 38156 (Int16) : -27380
+                 +0007:(HEX)[E3 88]  BIN : [1110001110001000] (UInt16) : 58248 (Int16) : -07288 (UInt32) : 2500649864 (Int32) : -1794317432 (Float) : 0,0000
+
+                 [CRC] : 7B 6D 
+
+ByteOrder16 = AB ByteOrder32 = ABCD
+[end capture]=====================================================================================================
+15:50:25:130 [297] bytes

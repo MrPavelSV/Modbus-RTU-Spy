@@ -231,17 +231,24 @@ namespace modbus_rtu_spy
             {
                 buff_Log += " [DEV] : " + string.Format("{0:X2}", frame[0]);
                 buff_Log += " [FUN] : " + string.Format("{0:X2}", frame[1]);
-                buff_Log += new_line;
                 if (frame[1] == 0x01 || frame[1] == 0x02)
                 {
+                    if (frame[1] == 0x01)
+                    {
+                        buff_Log += " Read Coils";
+                        buff_Log += new_line;
+                    }
+                    if (frame[1] == 0x02)
+                    {
+                        buff_Log += " Read Discrete Inputs";
+                        buff_Log += new_line;
+                    }
                     for (int i = 2; i < frame.Length - 2; i++)
                     {
                         if (i < 4)
                         {
                             if (i == 2)
                             {
-                                buff_Log += "                 [REQ] : ";
-                                buff_Log += new_line;
                                 buff_Log += "                 START BIN  : ";
                                 buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
                             }
@@ -270,14 +277,22 @@ namespace modbus_rtu_spy
                 }
                 if (frame[1] == 0x03 || frame[1] == 0x04)
                 {
+                    if (frame[1] == 0x03)
+                    {
+                        buff_Log += " Read Holding Registers";
+                        buff_Log += new_line;
+                    }
+                    if (frame[1] == 0x04)
+                    {
+                        buff_Log += " Read Input Registers";
+                        buff_Log += new_line;
+                    }
                     for (int i = 2; i < frame.Length - 2; i++)
                     {
                         if (i < 4)
                         {                            
                             if (i == 2)
                             {
-                                buff_Log += "                 [REQ] : ";
-                                buff_Log += new_line;
                                 buff_Log += "                 START REG  : ";
                                 buff_Log += "["+ string.Format("{0:X2}", frame[i]) + " ";
                             }
@@ -306,14 +321,14 @@ namespace modbus_rtu_spy
                 }
                 if (frame[1] == 0x06)
                 {
+                    buff_Log += " Write Single Register";
+                    buff_Log += new_line;
                     for (int i = 2; i < frame.Length - 2; i++)
                     {
                         if (i < 4)
                         {
                             if (i == 2)
                             {
-                                buff_Log += "                 [REQ] : ";
-                                buff_Log += new_line;
                                 buff_Log += "                 START REG : ";
                                 buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
                             }
@@ -370,14 +385,14 @@ namespace modbus_rtu_spy
                 }
                 if (frame[1] == 0x10)
                 {
+                    buff_Log += " Write Multiple registers";
+                    buff_Log += new_line;
                     for (int i = 2; i < frame.Length - 2; i++)
                     {
                         if (i < 4)
                         {
                             if (i == 2)
                             {
-                                buff_Log += "                 [REQ] : ";
-                                buff_Log += new_line;
                                 buff_Log += "                 START REG  : ";
                                 buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
                             }
@@ -485,6 +500,8 @@ namespace modbus_rtu_spy
                 }
                 if (frame[1] == 0x0F)
                 {
+                    buff_Log += " Write Multiple Coils";
+                    buff_Log += new_line;
                     j = 0;
                     for (int i = 2; i < frame.Length - 2; i++)
                     {
@@ -492,8 +509,6 @@ namespace modbus_rtu_spy
                         {
                             if (i == 2)
                             {
-                                buff_Log += "                 [REQ] : ";
-                                buff_Log += new_line;
                                 buff_Log += "                 START Coil  : ";
                                 buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
                             }
