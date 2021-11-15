@@ -188,7 +188,7 @@ namespace modbus_rtu_spy
                         continue;
                     }
 
-                    if (farmelist[i][0] == farmelist[i - 1][0] && farmelist[i][1] == farmelist[i - 1][1] && farmelist[i].Length == 8 && (farmelist[i][1] == 0x10) && (farmelist[i][5] == farmelist[i - 1][5]))
+                    if (farmelist[i][0] == farmelist[i - 1][0] && farmelist[i][1] == farmelist[i - 1][1] && farmelist[i].Length == 8 && (farmelist[i][1] == 0x10 || farmelist[i][1] == 0x0F) && (farmelist[i][5] == farmelist[i - 1][5]))
                     {
                         LogFrame(farmelist[i], "<= slave", numberframe);
                         continue;
@@ -480,6 +480,58 @@ namespace modbus_rtu_spy
                                 j++;
                                 buff_Log += new_line;
                             }
+                        }
+                    }
+                }
+                if (frame[1] == 0x0F)
+                {
+                    j = 0;
+                    for (int i = 2; i < frame.Length - 2; i++)
+                    {
+                        if (i < 4)
+                        {
+                            if (i == 2)
+                            {
+                                buff_Log += "                 [REQ] : ";
+                                buff_Log += new_line;
+                                buff_Log += "                 START Coil  : ";
+                                buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
+                            }
+                            if (i == 3)
+                            {
+                                buff_Log += string.Format("{0:X2}", frame[i]) + "]";
+                                buff_Log += " (DEC) : " + string.Format("{0:d5}", (ushort)((ushort)(frame[i - 1] << 8) + frame[i]));
+                                buff_Log += new_line;
+                            }
+                        }
+                        if (i > 3 && i < 6)
+                        {
+                            if (i == 4)
+                            {
+                                buff_Log += "                 NUM OF Coil : ";
+                                buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
+                            }
+                            if (i == 5)
+                            {
+                                buff_Log += string.Format("{0:X2}", frame[i]) + "]";
+                                buff_Log += " (DEC) : " + string.Format("{0:d5}", (ushort)((ushort)(frame[i - 1] << 8) + frame[i]));
+                                buff_Log += new_line;
+                            }
+                        }
+                        if (i == 6)
+                        {
+                            buff_Log += "                 Byte Count : [";
+                            buff_Log += string.Format("{0:X2}", frame[i]) + "]";
+                            buff_Log += " (DEC) : " + string.Format("{0:d5}", frame[i]);
+                            buff_Log += new_line;
+                        }
+                        if (i > 6)
+                        {
+                            string bits_str;
+                            try { bits_str = Convert.ToString(frame[i], 2).PadLeft(8, paddingChar: '0'); } catch { bits_str = "_"; }
+                            buff_Log += "                 " + string.Format("+{0:d4}", j) + " (HEX):[" + string.Format("{0:X2}", frame[i]) + "] BIN : [" + bits_str + "]";
+                            buff_Log += new_line;
+                            j += 8;
                         }
                     }
                 }
