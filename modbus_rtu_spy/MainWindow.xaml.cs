@@ -153,7 +153,7 @@ namespace modbus_rtu_spy
                             continue;
                         }
 
-                        if ((farmelist[i][1] == 0x05 || farmelist[i][1] == 0x06)) 
+                        if ((farmelist[i][1] == 0x05 || farmelist[i][1] == 0x06) && farmelist[i].Length > 6 && farmelist[i + 1].Length > 6) 
                         {
                             if ((farmelist[i][2] == farmelist[i + 1][2]) &&
                                 (farmelist[i][3] == farmelist[i + 1][3]) &&
