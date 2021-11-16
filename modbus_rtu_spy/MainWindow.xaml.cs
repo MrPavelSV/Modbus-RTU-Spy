@@ -229,8 +229,8 @@ namespace modbus_rtu_spy
 
             if (direction.Contains(">"))//master
             {
-                buff_Log += " [DEV] : " + string.Format("{0:X2}", frame[0]);
-                buff_Log += " [FUN] : " + string.Format("{0:X2}", frame[1]);
+                buff_Log += " DEV: [" + string.Format("{0:X2}", frame[0]) + "]";
+                buff_Log += " FUN: [" + string.Format("{0:X2}", frame[1]) + "]";
                 if (frame[1] == 0x01 || frame[1] == 0x02)
                 {
                     if (frame[1] == 0x01)
@@ -249,13 +249,13 @@ namespace modbus_rtu_spy
                         {
                             if (i == 2)
                             {
-                                buff_Log += "                 START BIN  : ";
+                                buff_Log += "                 START BIN : ";
                                 buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
                             }
                             if (i == 3)
                             {
                                 buff_Log += string.Format("{0:X2}", frame[i]) + "]";
-                                buff_Log += " (DEC) : " + string.Format("{0:d5}", (ushort)((ushort)(frame[i - 1] << 8) + frame[i]));
+                                buff_Log += " (DEC): " + string.Format("{0:d5}", (ushort)((ushort)(frame[i - 1] << 8) + frame[i]));
                                 buff_Log += new_line;
                             }
                         }
@@ -263,13 +263,13 @@ namespace modbus_rtu_spy
                         {
                             if (i == 4)
                             {
-                                buff_Log += "                 NUM OF BIN : ";
+                                buff_Log += "                 NUM OF BIN: ";
                                 buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
                             }
                             if (i == 5)
                             {
                                 buff_Log += string.Format("{0:X2}", frame[i]) + "]";
-                                buff_Log += " (DEC) : " + string.Format("{0:d5}", (ushort)((ushort)(frame[i - 1] << 8) + frame[i]));
+                                buff_Log += " (DEC): " + string.Format("{0:d5}", (ushort)((ushort)(frame[i - 1] << 8) + frame[i]));
                                 buff_Log += new_line;
                             }
                         }
@@ -293,13 +293,13 @@ namespace modbus_rtu_spy
                         {                            
                             if (i == 2)
                             {
-                                buff_Log += "                 START REG  : ";
+                                buff_Log += "                 START REG : ";
                                 buff_Log += "["+ string.Format("{0:X2}", frame[i]) + " ";
                             }
                             if (i == 3)
                             {
                                 buff_Log += string.Format("{0:X2}", frame[i]) + "]";
-                                buff_Log += " (DEC) : " + string.Format("{0:d5}", (ushort)((ushort)(frame[i-1]<<8) + frame[i]));
+                                buff_Log += " (DEC): " + string.Format("{0:d5}", (ushort)((ushort)(frame[i-1]<<8) + frame[i]));
                                 buff_Log += new_line;
                             }
                         }
@@ -307,13 +307,48 @@ namespace modbus_rtu_spy
                         {      
                             if (i == 4)
                             {
-                                buff_Log += "                 NUM OF REG : ";
+                                buff_Log += "                 NUM OF REG: ";
                                 buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
                             }
                             if (i == 5)
                             {
                                 buff_Log += string.Format("{0:X2}", frame[i]) + "]";
-                                buff_Log += " (DEC) : " + string.Format("{0:d5}", (ushort)((ushort)(frame[i-1] << 8) + frame[i]));
+                                buff_Log += " (DEC): " + string.Format("{0:d5}", (ushort)((ushort)(frame[i-1] << 8) + frame[i]));
+                                buff_Log += new_line;
+                            }
+                        }
+                    }
+                }
+                if (frame[1] == 0x05)
+                {
+                    buff_Log += " Write Single Coil";
+                    buff_Log += new_line;
+                    for (int i = 2; i < frame.Length - 2; i++)
+                    {
+                        if (i < 4)
+                        {
+                            if (i == 2)
+                            {
+                                buff_Log += "                 ADR Coil: ";
+                                buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
+                            }
+                            if (i == 3)
+                            {
+                                buff_Log += string.Format("{0:X2}", frame[i]) + "]";
+                                buff_Log += " (DEC) : " + string.Format("{0:d5}", (ushort)((ushort)(frame[i - 1] << 8) + frame[i]));
+                                buff_Log += new_line;
+                            }
+                        }
+                        if (i > 3)
+                        {
+                            if (i == 4)
+                            {
+                                buff_Log += "                  OUT VAL: ";
+                                buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
+                            }
+                            if (i == 5)
+                            {
+                                buff_Log += string.Format("{0:X2}", frame[i]) + "] ";
                                 buff_Log += new_line;
                             }
                         }
@@ -329,7 +364,7 @@ namespace modbus_rtu_spy
                         {
                             if (i == 2)
                             {
-                                buff_Log += "                 START REG : ";
+                                buff_Log += "                 START REG: ";
                                 buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
                             }
                             if (i == 3)
@@ -343,7 +378,7 @@ namespace modbus_rtu_spy
                         {
                             if (i == 4)
                             {
-                                buff_Log += "                   REG VAL : ";
+                                buff_Log += "                   REG VAL: ";
                                 buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
                             }
                             if (i == 5)
@@ -363,7 +398,7 @@ namespace modbus_rtu_spy
                                         try { vvcUInt16 = BitConverter.ToUInt16(customviewValue16, 0); } catch { vvcUInt16 = 0; }
                                         string bits_str;
                                         try { bits_str = Convert.ToString(vvcUInt16, 2).PadLeft(16, paddingChar: '0'); } catch { bits_str = "_"; }
-                                        buff_Log += " BIN : [" + bits_str + "] ";
+                                        buff_Log += " (BIN): [" + bits_str + "] ";
                                     }
                                     if (chek_UInt16 == true)
                                     {
@@ -393,13 +428,13 @@ namespace modbus_rtu_spy
                         {
                             if (i == 2)
                             {
-                                buff_Log += "                 START REG  : ";
+                                buff_Log += "                 START REG : ";
                                 buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
                             }
                             if (i == 3)
                             {
                                 buff_Log += string.Format("{0:X2}", frame[i]) + "]";
-                                buff_Log += " (DEC) : " + string.Format("{0:d5}", (ushort)((ushort)(frame[i - 1] << 8) + frame[i]));
+                                buff_Log += " (DEC): " + string.Format("{0:d5}", (ushort)((ushort)(frame[i - 1] << 8) + frame[i]));
                                 buff_Log += new_line;
                             }
                         }
@@ -407,28 +442,28 @@ namespace modbus_rtu_spy
                         {
                             if (i == 4)
                             {
-                                buff_Log += "                 NUM OF REG : ";
+                                buff_Log += "                 NUM OF REG: ";
                                 buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
                             }
                             if (i == 5)
                             {
                                 buff_Log += string.Format("{0:X2}", frame[i]) + "]";
-                                buff_Log += " (DEC) : " + string.Format("{0:d5}", (ushort)((ushort)(frame[i - 1] << 8) + frame[i]));
+                                buff_Log += " (DEC): " + string.Format("{0:d5}", (ushort)((ushort)(frame[i - 1] << 8) + frame[i]));
                                 buff_Log += new_line;
                             }
                         }
                         if (i == 6)
                         {
-                                buff_Log += "                 Byte Count : [";
+                                buff_Log += "                 Byte Count: [";
                                 buff_Log += string.Format("{0:X2}", frame[i]) + "]";
-                                buff_Log += " (DEC) : " + string.Format("{0:d5}", frame[i]);
+                                buff_Log += " (DEC): " + string.Format("{0:d5}", frame[i]);
                                 buff_Log += new_line;
                         }
                         if (i > 6)
                         {
                             if (i % 2 != 0)
                             {
-                            buff_Log += "                    REG VAL : ";
+                            buff_Log += "                    REG VAL: ";
                             buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
                             }
                             if (i % 2 == 0 )
@@ -448,19 +483,19 @@ namespace modbus_rtu_spy
                                         try { vvcUInt16 = BitConverter.ToUInt16(customviewValue16, 0); } catch { vvcUInt16 = 0; }
                                         string bits_str;
                                         try { bits_str = Convert.ToString(vvcUInt16, 2).PadLeft(16, paddingChar: '0'); } catch { bits_str = "_"; }
-                                        buff_Log += " BIN : [" + bits_str + "] ";
+                                        buff_Log += " (BIN): [" + bits_str + "] ";
                                     }
                                     if (chek_UInt16 == true)
                                     {
                                         ushort vvcUInt16;
                                         try { vvcUInt16 = BitConverter.ToUInt16(customviewValue16, 0); } catch { vvcUInt16 = 0; }
-                                        buff_Log += "(UInt16) : " + string.Format("{0:D5}", vvcUInt16);
+                                        buff_Log += "(UInt16): " + string.Format("{0:D5}", vvcUInt16);
                                     }
                                     if (chek_Int16 == true)
                                     {
                                         short vvc_Int16;
                                         try { vvc_Int16 = BitConverter.ToInt16(customviewValue16, 0); } catch { vvc_Int16 = 0; }
-                                        buff_Log += " (Int16) : " + string.Format("{0:D5}", vvc_Int16);
+                                        buff_Log += " (Int16): " + string.Format("{0:D5}", vvc_Int16);
                                     }
                                 }
                                 if ((j > 0) && ((j + 1) % 2 == 0) && ((chek_UInt32 == true) || (chek_Int32 == true) || (chek_Float == true)))
@@ -509,13 +544,13 @@ namespace modbus_rtu_spy
                         {
                             if (i == 2)
                             {
-                                buff_Log += "                 START Coil  : ";
+                                buff_Log += "                 START Coil : ";
                                 buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
                             }
                             if (i == 3)
                             {
                                 buff_Log += string.Format("{0:X2}", frame[i]) + "]";
-                                buff_Log += " (DEC) : " + string.Format("{0:d5}", (ushort)((ushort)(frame[i - 1] << 8) + frame[i]));
+                                buff_Log += " (DEC): " + string.Format("{0:d5}", (ushort)((ushort)(frame[i - 1] << 8) + frame[i]));
                                 buff_Log += new_line;
                             }
                         }
@@ -523,13 +558,13 @@ namespace modbus_rtu_spy
                         {
                             if (i == 4)
                             {
-                                buff_Log += "                 NUM OF Coil : ";
+                                buff_Log += "                 NUM OF Coil: ";
                                 buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
                             }
                             if (i == 5)
                             {
                                 buff_Log += string.Format("{0:X2}", frame[i]) + "]";
-                                buff_Log += " (DEC) : " + string.Format("{0:d5}", (ushort)((ushort)(frame[i - 1] << 8) + frame[i]));
+                                buff_Log += " (DEC): " + string.Format("{0:d5}", (ushort)((ushort)(frame[i - 1] << 8) + frame[i]));
                                 buff_Log += new_line;
                             }
                         }
@@ -537,44 +572,41 @@ namespace modbus_rtu_spy
                         {
                             buff_Log += "                 Byte Count : [";
                             buff_Log += string.Format("{0:X2}", frame[i]) + "]";
-                            buff_Log += " (DEC) : " + string.Format("{0:d5}", frame[i]);
+                            buff_Log += " (DEC): " + string.Format("{0:d5}", frame[i]);
                             buff_Log += new_line;
                         }
                         if (i > 6)
                         {
                             string bits_str;
                             try { bits_str = Convert.ToString(frame[i], 2).PadLeft(8, paddingChar: '0'); } catch { bits_str = "_"; }
-                            buff_Log += "                 " + string.Format("+{0:d4}", j) + " (HEX):[" + string.Format("{0:X2}", frame[i]) + "] BIN : [" + bits_str + "]";
+                            buff_Log += "                 " + string.Format("+{0:d4}", j) + " (HEX): [" + string.Format("{0:X2}", frame[i]) + "] (BIN): [" + bits_str + "]";
                             buff_Log += new_line;
                             j += 8;
                         }
                     }
                 }
-                buff_Log += new_line;
-                buff_Log += "                 [CRC] : ";
-                for (int i = frame.Length - 2; i < frame.Length; i++)
-                {
-                    buff_Log += string.Format("{0:X2}", frame[i]) + " ";
-                }
+                buff_Log += "                 CRC : [" + string.Format("{0:X2}", frame[frame.Length - 2]) + " " + string.Format("{0:X2}", frame[frame.Length - 1]) + "]";
             }
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if (direction.Contains("<"))//slave
             {
+                buff_Log += " DEV: [" + string.Format("{0:X2}", frame[0]) + "]";
+                buff_Log += " FUN: [" + string.Format("{0:X2}", frame[1]) + "]";
                 if (frame[1] == 0x03 || frame[1] == 0x04)
                 {
-                    buff_Log += " [DEV] : " + string.Format("{0:X2}", frame[0]);
-                    buff_Log += " [FUN] : " + string.Format("{0:X2}", frame[1]);
-                    buff_Log += " [CBD] (HEX): " + string.Format("{0:X2}", frame[2]);
-                    buff_Log += " (DEC) : " + string.Format("{0:d3}", frame[2]);
-                    buff_Log += " (REG) : " + string.Format("{0:d3}", frame[2] / 2);
                     buff_Log += new_line;
-                    buff_Log += "                 [ANS] : ";
+                    buff_Log += "                 CBD (HEX): " + string.Format("{0:X2}", frame[2]);
+                    buff_Log += " (DEC): " + string.Format("{0:d3}", frame[2]);
+                    buff_Log += " (REG): " + string.Format("{0:d3}", frame[2] / 2);
+                    buff_Log += new_line;
+                    buff_Log += "                 ANS : ";
                     buff_Log += new_line;
 
                     for (int i = 3; i < frame.Length - 2; i++)
                     {
                         if (k == 0)
                         {
-                            buff_Log += "                 " + string.Format("+{0:d4}", j) + ":(HEX)[" + string.Format("{0:X2}", frame[i]) + " ";
+                            buff_Log += "                 " + string.Format("+{0:d4}", j) + ":(HEX) [" + string.Format("{0:X2}", frame[i]) + " ";
                             k = 1;
                         }
                         else
@@ -644,22 +676,14 @@ namespace modbus_rtu_spy
                             buff_Log += new_line;
                         }
                     }
-
-                    buff_Log += new_line;
-                    buff_Log += "                 [CRC] : ";
-                    for (int i = frame.Length - 2; i < frame.Length; i++)
-                    {
-                        buff_Log += string.Format("{0:X2}", frame[i]) + " ";
-                    }
                 }
                 else if (frame[1] == 0x01 || frame[1] == 0x02)
                 {
-                    buff_Log += " [DEV] : " + string.Format("{0:X2}", frame[0]);
-                    buff_Log += " [FUN] : " + string.Format("{0:X2}", frame[1]);
-                    buff_Log += " [CBD] (HEX): " + string.Format("{0:X2}", frame[2]);
+                    buff_Log += new_line;
+                    buff_Log += "                 CBD (HEX): " + string.Format("{0:X2}", frame[2]);
                     buff_Log += " (DEC) : " + string.Format("{0:d3}", frame[2]);
                     buff_Log += new_line;
-                    buff_Log += "                 [ANS] : ";
+                    buff_Log += "                 ANS : ";
                     buff_Log += new_line;
                     j = 0;
                     for (int i = 3; i < frame.Length - 2; i++)
@@ -670,19 +694,9 @@ namespace modbus_rtu_spy
                         buff_Log += new_line;
                         j+=8;
                     }
-
-                    buff_Log += new_line;
-                    buff_Log += "                 [CRC] : ";
-
-                    for (int i = frame.Length - 2; i < frame.Length; i++)
-                    {
-                        buff_Log += string.Format("{0:X2}", frame[i]) + " ";
-                    }
                 }
                 else if (frame[1] == 0x06)
                 {
-                    buff_Log += " [DEV] : " + string.Format("{0:X2}", frame[0]);
-                    buff_Log += " [FUN] : " + string.Format("{0:X2}", frame[1]);
                     buff_Log += new_line;
                     for (int i = 2; i < frame.Length - 2; i++)
                     {
@@ -690,9 +704,9 @@ namespace modbus_rtu_spy
                         {
                             if (i == 2)
                             {
-                                buff_Log += "                 [ANS] : ";
+                                buff_Log += "                 ANS : ";
                                 buff_Log += new_line;
-                                buff_Log += "                 START REG : ";
+                                buff_Log += "                 ADR REG: ";
                                 buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
                             }
                             if (i == 3)
@@ -706,7 +720,7 @@ namespace modbus_rtu_spy
                         {
                             if (i == 4)
                             {
-                                buff_Log += "                   REG VAL : ";
+                                buff_Log += "                 REG VAL: ";
                                 buff_Log += "[" + string.Format("{0:X2}", frame[i]) + " ";
                             }
                             if (i == 5)
@@ -745,33 +759,26 @@ namespace modbus_rtu_spy
                             }
                         }
                     }
-
-                    buff_Log += new_line;
-                    buff_Log += "                 [CRC] : ";
-
-                    for (int i = frame.Length - 2; i < frame.Length; i++)
-                    {
-                        buff_Log += string.Format("{0:X2}", frame[i]) + " ";
-                    }
                 }
                 else
                 {
-                    buff_Log += " [DEV] : " + string.Format("{0:X2}", frame[0]);
-                    buff_Log += " [FUN] : " + string.Format("{0:X2}", frame[1]);
                     buff_Log += new_line;
-                    buff_Log += "                 [ANS] : ";
+                    buff_Log += "                 ANS : [";
                     for (int i = 2; i < frame.Length - 2; i++)
                     {
-                        buff_Log += string.Format("{0:X2}", frame[i]) + " ";
+                        if (i == frame.Length - 3)
+                        {
+                            buff_Log += string.Format("{0:X2}", frame[i]);
+                        }
+                        else 
+                        {
+                            buff_Log += string.Format("{0:X2}", frame[i]) + " ";
+                        }
                     }
-
+                    buff_Log += "]";
                     buff_Log += new_line;
-                    buff_Log += "                 [CRC] : ";
-                    for (int i = frame.Length - 2; i < frame.Length; i++)
-                    {
-                        buff_Log += string.Format("{0:X2}", frame[i]) + " ";
-                    }
                 }
+                buff_Log += "                 CRC : [" + string.Format("{0:X2}", frame[frame.Length - 2]) + " " + string.Format("{0:X2}", frame[frame.Length - 1]) + "]";
             }
             else//no answer
             {
