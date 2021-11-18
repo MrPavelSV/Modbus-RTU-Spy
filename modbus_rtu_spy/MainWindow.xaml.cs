@@ -807,7 +807,7 @@ namespace modbus_rtu_spy
                     if (frame[2] == 0x06) { buff_Log += " SERVER DEVICE BUSY"; }
                     if (frame[2] == 0x08) { buff_Log += " MEMORY PARITY ERROR"; }
                     if (frame[2] == 0x0A) { buff_Log += " GATEWAY PATH UNAVAILABLE"; }
-                    if (frame[2] == 0x0B) { buff_Log += " GATEWAY  TARGET  DEVICE FAILED TO RESPOND"; }
+                    if (frame[2] == 0x0B) { buff_Log += " GATEWAY TARGET DEVICE FAILED TO RESPOND"; }
                     buff_Log += new_line;
                 }
                 else
