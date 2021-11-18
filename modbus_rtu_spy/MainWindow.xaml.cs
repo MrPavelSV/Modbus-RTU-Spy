@@ -83,6 +83,7 @@ namespace modbus_rtu_spy
                          dataLog[l + 1] == 0x83 ||
                          dataLog[l + 1] == 0x84 ||
                          dataLog[l + 1] == 0x85 ||
+                         dataLog[l + 1] == 0x86 ||
                          dataLog[l + 1] == 0x8F ||
                          dataLog[l + 1] == 0x90))
                     {
@@ -193,7 +194,22 @@ namespace modbus_rtu_spy
                         LogFrame(farmelist[i], "<= slave", numberframe);
                         continue;
                     }
-                    if (Enumerable.SequenceEqual(farmelist[i], farmelist[i - 1]) && (farmelist[i][1] == 0x05 || farmelist[i][1] == 0x06) && farmelist[i].Length == 8)
+                    if (farmelist[i][0] == farmelist[i - 1][0] && farmelist[i][1] == farmelist[i - 1][1] && (farmelist[i][1] == 0x05 || farmelist[i][1] == 0x06) && farmelist[i].Length == 8)
+                    {
+                        LogFrame(farmelist[i], "<= slave", numberframe);
+                        continue;
+                    }
+                    if ((
+                        (farmelist[i][1] == 0x81 && farmelist[i - 1][1] == 0x01) ||
+                        (farmelist[i][1] == 0x82 && farmelist[i - 1][1] == 0x02) ||
+                        (farmelist[i][1] == 0x83 && farmelist[i - 1][1] == 0x03) ||
+                        (farmelist[i][1] == 0x84 && farmelist[i - 1][1] == 0x04) ||
+                        (farmelist[i][1] == 0x85 && farmelist[i - 1][1] == 0x05) ||
+                        (farmelist[i][1] == 0x86 && farmelist[i - 1][1] == 0x06) ||
+                        (farmelist[i][1] == 0x8F && farmelist[i - 1][1] == 0x0F) ||
+                        (farmelist[i][1] == 0x90 && farmelist[i - 1][1] == 0x10)) &&
+                        farmelist[i][0] == farmelist[i - 1][0] &&
+                        farmelist[i].Length == 5)
                     {
                         LogFrame(farmelist[i], "<= slave", numberframe);
                         continue;
@@ -591,7 +607,17 @@ namespace modbus_rtu_spy
             else if (direction.Contains("<"))//slave
             {
                 buff_Log += " DEV: [" + string.Format("{0:X2}", frame[0]) + "]";
-                buff_Log += " FUN: [" + string.Format("{0:X2}", frame[1]) + "]";
+                if (frame[1] != 0x81 &&
+                    frame[1] != 0x82 &&
+                    frame[1] != 0x83 &&
+                    frame[1] != 0x84 &&
+                    frame[1] != 0x85 &&
+                    frame[1] != 0x86 &&
+                    frame[1] != 0x8F &&
+                    frame[1] != 0x90)
+                { 
+                    buff_Log += " FUN: [" + string.Format("{0:X2}", frame[1]) + "]"; 
+                }
                 if (frame[1] == 0x03 || frame[1] == 0x04)
                 {
                     buff_Log += new_line;
@@ -692,7 +718,7 @@ namespace modbus_rtu_spy
                         try { bits_str = Convert.ToString(frame[i], 2).PadLeft(8, paddingChar: '0'); } catch { bits_str = "_"; }
                         buff_Log += "                 " + string.Format("+{0:d4}", j) + " (HEX):[" + string.Format("{0:X2}", frame[i]) + "] BIN : [" + bits_str + "]";
                         buff_Log += new_line;
-                        j+=8;
+                        j += 8;
                     }
                 }
                 else if (frame[1] == 0x06)
@@ -760,6 +786,30 @@ namespace modbus_rtu_spy
                         }
                     }
                 }
+                else if (
+                    frame[1] == 0x81 ||
+                    frame[1] == 0x82 ||
+                    frame[1] == 0x83 ||
+                    frame[1] == 0x84 ||
+                    frame[1] == 0x85 ||
+                    frame[1] == 0x86 ||
+                    frame[1] == 0x8F ||
+                    frame[1] == 0x90
+                    )
+                {
+                    buff_Log += " Error code: [" + string.Format("{0:X2}", frame[1]) + "]";
+                    buff_Log += " Exception code: [" + string.Format("{0:X2}", frame[2]) + "]";
+                    if (frame[2] == 0x01) { buff_Log += " ILLEGAL FUNCTION"; }
+                    if (frame[2] == 0x02) { buff_Log += " ILLEGAL DATA ADDRESS"; }
+                    if (frame[2] == 0x03) { buff_Log += " ILLEGAL DATA VALUE"; }
+                    if (frame[2] == 0x04) { buff_Log += " SERVER DEVICE FAILURE"; }
+                    if (frame[2] == 0x05) { buff_Log += " ACKNOWLEDGE"; }
+                    if (frame[2] == 0x06) { buff_Log += " SERVER DEVICE BUSY"; }
+                    if (frame[2] == 0x08) { buff_Log += " MEMORY PARITY ERROR"; }
+                    if (frame[2] == 0x0A) { buff_Log += " GATEWAY PATH UNAVAILABLE"; }
+                    if (frame[2] == 0x0B) { buff_Log += " GATEWAY  TARGET  DEVICE FAILED TO RESPOND"; }
+                    buff_Log += new_line;
+                }
                 else
                 {
                     buff_Log += new_line;
@@ -770,7 +820,7 @@ namespace modbus_rtu_spy
                         {
                             buff_Log += string.Format("{0:X2}", frame[i]);
                         }
-                        else 
+                        else
                         {
                             buff_Log += string.Format("{0:X2}", frame[i]) + " ";
                         }
