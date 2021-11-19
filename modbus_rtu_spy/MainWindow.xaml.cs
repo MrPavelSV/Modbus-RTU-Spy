@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Windows;
@@ -23,7 +24,7 @@ namespace modbus_rtu_spy
         public bool chek_Float = false;
         public string[] orderByteL16 = { "AB", "BA" };
         public string[] orderByteL32 = { "ABCD", "ABDC", "ACBD", "ACDB", "ADBC", "ADCB", "BACD", "BADC", "BCAD", "BCDA", "BDAC", "BDCA", "CABD", "CADB", "CBAD", "CBDA", "CDAB", "CDBA", "DABC", "DACB", "DBAC", "DBCA", "DCAB", "DCBA" };
-
+        public StreamWriter sw;
         public System.Threading.Timer timer;
         public string new_line;
 
@@ -32,7 +33,6 @@ namespace modbus_rtu_spy
             InitializeComponent();
             SerialCom sp = new SerialCom();
             new_line = Environment.NewLine;
-
             cbx_Port.ItemsSource = sp.GetSerialPorts();
             cbx_Parity.ItemsSource = sp.GetParity();
             cbx_StopBits.ItemsSource = sp.GetStopBits();
@@ -41,6 +41,7 @@ namespace modbus_rtu_spy
             cbx_Handshake.ItemsSource = sp.GetHandshake();
             Cbx_BO16.ItemsSource = orderByteL16;
             Cbx_BO32.ItemsSource = orderByteL32;
+
         }
 
         private void OnTimedEvent(object state)
@@ -232,6 +233,20 @@ namespace modbus_rtu_spy
                     textboxRaw.AppendText(RawCom);
                     textboxRaw.ScrollToEnd();
                 }
+            ));
+        }
+
+        private void ToLog(string text)
+        {
+            if (sw != null)
+            {
+                sw.Write(text);
+            }
+            Dispatcher.Invoke(new Action(() =>
+            {
+                textbox.AppendText(text);
+                textbox.ScrollToEnd();
+            }
             ));
         }
 
@@ -840,16 +855,6 @@ namespace modbus_rtu_spy
             buff_Log += new_line;
         }
 
-        private void ToLog(string text)
-        {
-            Dispatcher.Invoke(new Action(() =>
-            {
-                textbox.AppendText(text);
-                textbox.ScrollToEnd();
-            }
-            ));
-        }
-
         private void OpenComPort(object sender, RoutedEventArgs e)
         {
             string comname = cbx_Port.Text;
@@ -1132,6 +1137,17 @@ namespace modbus_rtu_spy
         private void Cbx_BO32_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             orderbyte32 = Cbx_BO32.SelectedItem.ToString();
+        }
+
+        private void savetofile_Checked(object sender, RoutedEventArgs e)
+        {
+            string DataStrfile = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_fff") + ".txt";
+            sw = new StreamWriter(DataStrfile);
+        }
+
+        private void savetofile_Unchecked(object sender, RoutedEventArgs e)
+        {
+            sw.Close();
         }
     }
 }

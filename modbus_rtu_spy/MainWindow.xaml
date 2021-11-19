@@ -67,6 +67,8 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Content="Parse" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <CheckBox Grid.Column="0" Name="savetofile" Content="Save to file" HorizontalAlignment="Left" VerticalAlignment="Top" Checked="savetofile_Checked" Unchecked="savetofile_Unchecked"  Margin="0,7,0,0">
+            </CheckBox>
             <TextBox Text="============================================================================================================================"  Grid.Column="0"  Name="textbox" FontFamily="Consolas" Width="Auto" VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" UseLayoutRounding="True" TextWrapping="Wrap" Margin="0,23,0,0">
             </TextBox>
             <GridSplitter Grid.Column="1" ShowsPreview="False" Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
