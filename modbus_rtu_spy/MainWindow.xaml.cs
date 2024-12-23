@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Ports;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -27,6 +26,7 @@ namespace modbus_rtu_spy
         public StreamWriter sw;
         public System.Threading.Timer timer;
         public string new_line;
+        private readonly HashSet<byte> commandCodes = new HashSet<byte> { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x0F, 0x10, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x8F, 0x90};
 
         public MainWindow()
         {
@@ -70,23 +70,7 @@ namespace modbus_rtu_spy
             {
                 for (k = l; k < (datareceive - 4); k++)
                 {
-                    if ((dataLog[l] > 0) && (dataLog[l] < 249) &&
-                        (dataLog[l + 1] == 0x01 ||
-                         dataLog[l + 1] == 0x02 ||
-                         dataLog[l + 1] == 0x03 ||
-                         dataLog[l + 1] == 0x04 ||
-                         dataLog[l + 1] == 0x05 ||
-                         dataLog[l + 1] == 0x06 ||
-                         dataLog[l + 1] == 0x0F ||
-                         dataLog[l + 1] == 0x10 ||
-                         dataLog[l + 1] == 0x81 ||
-                         dataLog[l + 1] == 0x82 ||
-                         dataLog[l + 1] == 0x83 ||
-                         dataLog[l + 1] == 0x84 ||
-                         dataLog[l + 1] == 0x85 ||
-                         dataLog[l + 1] == 0x86 ||
-                         dataLog[l + 1] == 0x8F ||
-                         dataLog[l + 1] == 0x90))
+                    if ((dataLog[l] > 0) && (dataLog[l] < 249) && commandCodes.Contains(dataLog[l + 1]))
                     {
                         int LenghtFrame = k + 3 - l;
                         if (LenghtFrame > 256) { break; }

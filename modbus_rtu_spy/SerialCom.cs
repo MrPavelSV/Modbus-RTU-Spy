@@ -33,48 +33,46 @@ public class COMPortInfo : IComparable<COMPortInfo>
 {
     public string Name { get; set; }
     public string Description { get; set; }
+
     public COMPortInfo() { }
 
     public int CompareTo(COMPortInfo item)
     {
-        try { return Int32.Parse(this.Name.Substring(3)).CompareTo(Int32.Parse(item.Name.Substring(3))); } catch { return -1; }
+        try { return int.Parse(this.Name.Substring(3)).CompareTo(int.Parse(item.Name.Substring(3))); }
+        catch { return -1; }
     }
 
     public static List<COMPortInfo> GetCOMPortsInfo()
     {
         List<COMPortInfo> comPortInfoList = new List<COMPortInfo>();
-        ConnectionOptions options = ProcessConnection.ProcessConnectionOptions();
-        ManagementScope connectionScope = ProcessConnection.ConnectionScope(Environment.MachineName, options, @"\root\CIMV2");
-        ObjectQuery objectQuery = new ObjectQuery("SELECT * FROM Win32_PnPEntity WHERE ConfigManagerErrorCode = 0");
-        ManagementObjectSearcher comPortSearcher = new ManagementObjectSearcher(connectionScope, objectQuery);
+        ManagementScope connectionScope = new ManagementScope(@"\\.\root\CIMV2");
+        connectionScope.Connect();
 
-        using (comPortSearcher)
+        ObjectQuery objectQuery = new ObjectQuery("SELECT * FROM Win32_PnPEntity WHERE ConfigManagerErrorCode = 0");
+        using (ManagementObjectSearcher comPortSearcher = new ManagementObjectSearcher(connectionScope, objectQuery))
         {
-            string caption = null;
             foreach (ManagementObject obj in comPortSearcher.Get())
             {
-                if (obj != null)
+                string caption = obj["Caption"]?.ToString();
+                if (!string.IsNullOrEmpty(caption) && (caption.Contains("(COM") || caption.Contains("(com")))
                 {
-                    object captionObj = obj["Caption"];
-                    if (captionObj != null)
+                    int startIdx = caption.LastIndexOf("(COM") + 1;
+                    int endIdx = caption.LastIndexOf(")");
+                    string portName = caption.Substring(startIdx, endIdx - startIdx);
+
+                    COMPortInfo comPortInfo = new COMPortInfo
                     {
-                        caption = captionObj.ToString();
-                        if (caption.Contains("(COM"))
-                        {
-                            COMPortInfo comPortInfo = new COMPortInfo
-                            {
-                                Name = caption.Substring(caption.LastIndexOf("(COM")).Replace("(", string.Empty).Replace(")", string.Empty),
-                                Description = caption
-                            };
-                            comPortInfoList.Add(comPortInfo);
-                        }
-                    }
+                        Name = portName,
+                        Description = caption
+                    };
+                    comPortInfoList.Add(comPortInfo);
                 }
             }
         }
         return comPortInfoList;
     }
 }
+
 
 namespace modbus_rtu_spy
 {
