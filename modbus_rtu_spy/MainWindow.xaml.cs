@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Ports;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -26,7 +27,8 @@ namespace modbus_rtu_spy
         public StreamWriter sw;
         public System.Threading.Timer timer;
         public string new_line;
-        private readonly HashSet<byte> commandCodes = new HashSet<byte> { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x0F, 0x10, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x8F, 0x90};
+        private readonly HashSet<byte> commandCodes = new HashSet<byte> { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x0F, 0x10};
+        private readonly HashSet<byte> errorCodes = new HashSet<byte>   { 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x8F, 0x90};
 
         public MainWindow()
         {
@@ -58,6 +60,7 @@ namespace modbus_rtu_spy
             }
             catch { return; }
 
+            int j = 0;
             int k = 0;
             int l = 0;
             int numberframe = 0;
@@ -70,7 +73,7 @@ namespace modbus_rtu_spy
             {
                 for (k = l; k < (datareceive - 4); k++)
                 {
-                    if ((dataLog[l] > 0) && (dataLog[l] < 249) && commandCodes.Contains(dataLog[l + 1]))
+                    if ((dataLog[l] > 0) && (dataLog[l] < 249) && (commandCodes.Contains(dataLog[l + 1]) || errorCodes.Contains(dataLog[l + 1])))
                     {
                         int LenghtFrame = k + 3 - l;
                         if (LenghtFrame > 256) { break; }
@@ -124,28 +127,29 @@ namespace modbus_rtu_spy
             buff_Log = "";
             for (int i = 0; i < farmelist.Count; i++)
             {
+                j = i + 1;
                 numberframe++;
-                if ((i + 1) < farmelist.Count)
+                if (j < farmelist.Count)
                 {
-                    if (farmelist[i][0] == farmelist[i + 1][0] && farmelist[i][1] == farmelist[i + 1][1])
+                    if (farmelist[i][0] == farmelist[j][0] && farmelist[i][1] == farmelist[j][1])
                     {
-                        if (farmelist[i].Length == 8 && 
-                            (farmelist[i][1] == 0x01 || 
-                             farmelist[i][1] == 0x02 || 
-                             farmelist[i][1] == 0x03 || 
-                             farmelist[i][1] == 0x04 ))
+                        if (farmelist[i].Length == 8 &&
+                            (farmelist[i][1] == 0x01 ||
+                             farmelist[i][1] == 0x02 ||
+                             farmelist[i][1] == 0x03 ||
+                             farmelist[i][1] == 0x04))
                         {
                             LogFrame(farmelist[i], "master=>", numberframe);
                             continue;
                         }
 
-                        if ((farmelist[i][1] == 0x05 || farmelist[i][1] == 0x06) && farmelist[i].Length > 6 && farmelist[i + 1].Length > 6) 
+                        if ((farmelist[i][1] == 0x05 || farmelist[i][1] == 0x06) && farmelist[i].Length > 6 && farmelist[j].Length > 6)
                         {
-                            if ((farmelist[i][2] == farmelist[i + 1][2]) &&
-                                (farmelist[i][3] == farmelist[i + 1][3]) &&
-                                (farmelist[i][4] == farmelist[i + 1][4]) &&
-                                (farmelist[i][5] == farmelist[i + 1][5]))
-                                
+                            if ((farmelist[i][2] == farmelist[j][2]) &&
+                                (farmelist[i][3] == farmelist[j][3]) &&
+                                (farmelist[i][4] == farmelist[j][4]) &&
+                                (farmelist[i][5] == farmelist[j][5]))
+
                             {
                                 LogFrame(farmelist[i], "master=>", numberframe);
                                 continue;
@@ -160,45 +164,40 @@ namespace modbus_rtu_spy
                 }
                 if (i > 0)
                 {
-                    if (farmelist[i][0] == farmelist[i - 1][0] && farmelist[i][1] == farmelist[i - 1][1] && farmelist[i].Length != 8 && (farmelist[i][1] == 0x03 || farmelist[i][1] == 0x04))
-                    {
-                        if (farmelist[i][2] == (((ushort)((ushort)(farmelist[i - 1][4] << 8) | farmelist[i - 1][5])) * 2))
+                    j = i - 1;
+                    if (farmelist[i][0] == farmelist[j][0] && farmelist[i][1] == farmelist[j][1]) {
+                        if (farmelist[i].Length != 8 && (farmelist[i][1] == 0x03 || farmelist[i][1] == 0x04))
+                        {
+                            if (farmelist[i][2] == (((ushort)((ushort)(farmelist[j][4] << 8) | farmelist[j][5])) * 2))
+                            {
+                                LogFrame(farmelist[i], "<= slave", numberframe);
+                                continue;
+                            }
+                        }
+                        if (farmelist[i].Length != 8 && (farmelist[i][1] == 0x01 || farmelist[i][1] == 0x02))
+                        {
+                            LogFrame(farmelist[i], "<= slave", numberframe);
+                            continue;
+                        }
+
+                        if (farmelist[i].Length == 8 && (farmelist[i][1] == 0x10 || farmelist[i][1] == 0x0F) && (farmelist[i][5] == farmelist[j][5]))
+                        {
+                            LogFrame(farmelist[i], "<= slave", numberframe);
+                            continue;
+                        }
+
+                        if ((farmelist[i][1] == 0x05 || farmelist[i][1] == 0x06) && farmelist[i].Length == 8)
                         {
                             LogFrame(farmelist[i], "<= slave", numberframe);
                             continue;
                         }
                     }
-                    if (farmelist[i][0] == farmelist[i - 1][0] && farmelist[i][1] == farmelist[i - 1][1] && farmelist[i].Length != 8 && (farmelist[i][1] == 0x01 || farmelist[i][1] == 0x02))
+                    if (errorCodes.Contains(farmelist[i][1]) && commandCodes.Contains(farmelist[j][1]) && farmelist[i][0] == farmelist[j][0] && farmelist[i].Length == 5)
                     {
                         LogFrame(farmelist[i], "<= slave", numberframe);
                         continue;
                     }
 
-                    if (farmelist[i][0] == farmelist[i - 1][0] && farmelist[i][1] == farmelist[i - 1][1] && farmelist[i].Length == 8 && (farmelist[i][1] == 0x10 || farmelist[i][1] == 0x0F) && (farmelist[i][5] == farmelist[i - 1][5]))
-                    {
-                        LogFrame(farmelist[i], "<= slave", numberframe);
-                        continue;
-                    }
-                    if (farmelist[i][0] == farmelist[i - 1][0] && farmelist[i][1] == farmelist[i - 1][1] && (farmelist[i][1] == 0x05 || farmelist[i][1] == 0x06) && farmelist[i].Length == 8)
-                    {
-                        LogFrame(farmelist[i], "<= slave", numberframe);
-                        continue;
-                    }
-                    if ((
-                        (farmelist[i][1] == 0x81 && farmelist[i - 1][1] == 0x01) ||
-                        (farmelist[i][1] == 0x82 && farmelist[i - 1][1] == 0x02) ||
-                        (farmelist[i][1] == 0x83 && farmelist[i - 1][1] == 0x03) ||
-                        (farmelist[i][1] == 0x84 && farmelist[i - 1][1] == 0x04) ||
-                        (farmelist[i][1] == 0x85 && farmelist[i - 1][1] == 0x05) ||
-                        (farmelist[i][1] == 0x86 && farmelist[i - 1][1] == 0x06) ||
-                        (farmelist[i][1] == 0x8F && farmelist[i - 1][1] == 0x0F) ||
-                        (farmelist[i][1] == 0x90 && farmelist[i - 1][1] == 0x10)) &&
-                        farmelist[i][0] == farmelist[i - 1][0] &&
-                        farmelist[i].Length == 5)
-                    {
-                        LogFrame(farmelist[i], "<= slave", numberframe);
-                        continue;
-                    }
                 }
                 LogFrame(farmelist[i], "no answer", numberframe);
             }
