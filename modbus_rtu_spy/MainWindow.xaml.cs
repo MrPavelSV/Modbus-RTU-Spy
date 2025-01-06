@@ -605,14 +605,7 @@ namespace modbus_rtu_spy
             else if (direction.Contains("<"))//slave
             {
                 buff_Log += " DEV: [" + string.Format("{0:X2}", frame[0]) + "]";
-                if (frame[1] != 0x81 &&
-                    frame[1] != 0x82 &&
-                    frame[1] != 0x83 &&
-                    frame[1] != 0x84 &&
-                    frame[1] != 0x85 &&
-                    frame[1] != 0x86 &&
-                    frame[1] != 0x8F &&
-                    frame[1] != 0x90)
+                if (!errorCodes.Contains(frame[1]))
                 { 
                     buff_Log += " FUN: [" + string.Format("{0:X2}", frame[1]) + "]"; 
                 }
@@ -784,16 +777,7 @@ namespace modbus_rtu_spy
                         }
                     }
                 }
-                else if (
-                    frame[1] == 0x81 ||
-                    frame[1] == 0x82 ||
-                    frame[1] == 0x83 ||
-                    frame[1] == 0x84 ||
-                    frame[1] == 0x85 ||
-                    frame[1] == 0x86 ||
-                    frame[1] == 0x8F ||
-                    frame[1] == 0x90
-                    )
+                else if (errorCodes.Contains(frame[1]))
                 {
                     buff_Log += " Error code: [" + string.Format("{0:X2}", frame[1]) + "]";
                     buff_Log += " Exception code: [" + string.Format("{0:X2}", frame[2]) + "]";
